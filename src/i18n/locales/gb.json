@@ -1,0 +1,20 @@
+{
+  "language": {
+    "english": "English",
+    "simplified_chinese": "Simplified Chinese"
+  },
+  "nav": {
+    "message": "Destiny Hash Ring"
+  },
+  "links": {
+    "repository": "Github",
+    "community": "Telegram"
+  },
+  "round-info": {
+    "current": "Running Round",
+    "past": "Past Round Information",
+    "round-num": "Round Number",
+    "round-participant": "Participants",
+    "round-cost": "Round Cost"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "language": {
+    "english": "英语",
+    "simplified_chinese": "简体中文"
+  },
+  "nav": {
+    "message": "命运哈希轮"
+  },
+  "links": {
+    "repository": "Github",
+    "community": "Telegram"
+  },
+  "round-info": {
+    "current": "当前轮次",
+    "past": "历史轮次信息",
+    "round-num": "轮次编号",
+    "round-participant": "参与人数",
+    "round-cost": "参投价格"
+  }
+}

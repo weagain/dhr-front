@@ -5,23 +5,17 @@ import AppLayout from '../layouts/AppLayout.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:catchAll(.*)',
-    redirect: { name: 'dashboard-home' },
+    redirect: { name: 'index' },
   },
   {
-    name: 'Home',
-    path: '/',
+    name: 'dhr',
+    path: '/dhr',
     component: AppLayout,
     children: [
       {
-        name: 'HashRing',
-        path: 'dhr',
-        children: [
-          {
-            name: 'dhr-index',
-            path: 'index',
-            component: () => import('../pages/dhr/index.vue'),
-          },
-        ],
+        name: 'index',
+        path: 'index',
+        component: () => import('../pages/dhr/index.vue'),
       },
     ],
   },

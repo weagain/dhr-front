@@ -34,7 +34,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [],
@@ -42,7 +41,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [],
@@ -50,7 +48,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [],
@@ -58,7 +55,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [],
@@ -66,7 +62,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [],
@@ -74,7 +69,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [
@@ -85,7 +79,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [
@@ -96,7 +89,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [
@@ -107,7 +99,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
@@ -115,7 +106,6 @@ const crossTokenABI = [
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [],
@@ -123,7 +113,13 @@ const crossTokenABI = [
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    name: 'roundWinCode',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
@@ -134,16 +130,14 @@ const crossTokenABI = [
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
-  { stateMutability: 'payable', type: 'receive', payable: true },
+  { stateMutability: 'payable', type: 'receive' },
   {
     inputs: [{ internalType: 'address', name: '_inviter', type: 'address' }],
     name: 'enjoy',
     outputs: [],
     stateMutability: 'payable',
     type: 'function',
-    payable: true,
   },
   {
     inputs: [],
@@ -154,6 +148,8 @@ const crossTokenABI = [
           { internalType: 'uint256', name: 'index', type: 'uint256' },
           { internalType: 'address[]', name: 'users', type: 'address[]' },
           { internalType: 'uint256', name: 'prize', type: 'uint256' },
+          { internalType: 'address[]', name: 'winners', type: 'address[]' },
+          { internalType: 'uint256', name: 'wincode', type: 'uint256' },
         ],
         internalType: 'struct DestinyHashRing.RoundInfo',
         name: 'data',
@@ -162,7 +158,6 @@ const crossTokenABI = [
     ],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [{ internalType: 'uint256', name: '_hisRound', type: 'uint256' }],
@@ -173,6 +168,8 @@ const crossTokenABI = [
           { internalType: 'uint256', name: 'index', type: 'uint256' },
           { internalType: 'address[]', name: 'users', type: 'address[]' },
           { internalType: 'uint256', name: 'prize', type: 'uint256' },
+          { internalType: 'address[]', name: 'winners', type: 'address[]' },
+          { internalType: 'uint256', name: 'wincode', type: 'uint256' },
         ],
         internalType: 'struct DestinyHashRing.RoundInfo',
         name: 'data',
@@ -181,7 +178,17 @@ const crossTokenABI = [
     ],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
+  },
+  { inputs: [], name: 'withdraw', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+  {
+    inputs: [
+      { internalType: 'address', name: 'wallet', type: 'address' },
+      { internalType: 'uint256', name: 'comw', type: 'uint256' },
+    ],
+    name: 'testCode',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'pure',
+    type: 'function',
   },
 ]
 
@@ -201,7 +208,7 @@ export const supportNetworks: NetModel[] = [
     chainSymbol: 'ETHF',
     textColor: '#FFFFFF',
     color: 'primary',
-    contractAddr: '0x6821Bd2c593d075f636e5efba54a9182Ebcc9347',
+    contractAddr: '0xf7B06C845CE05De7FD6db557e64584376E72FFCb',
     contractAbi: crossTokenABI,
   },
   // {

@@ -35,7 +35,8 @@
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="info">
               <va-card-content>
                 <h4 class="va-h4 m-1 text-white">{{ t('round-info.round-participant') }}</h4>
-                <p class="text-white">{{ currentRound.participants }}</p>
+                <p class="text-white">{{ currentRound.participants.length }}</p>
+                <p v-for="(item, index) in currentRound.participants" :key="index" class="text-white">{{ item }}</p>
               </va-card-content>
             </va-card>
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="danger">
@@ -103,7 +104,7 @@
 
   let currentRound = reactive({
     number: 0,
-    participants: 0,
+    participants: [''],
     prize: 0,
   })
 
@@ -131,6 +132,8 @@
     index: number
     users: string[]
     prize: number
+    winners: string[]
+    wincode: number
   }
   onMounted(async () => {
     for (const e of supportNetworks) {
@@ -139,15 +142,25 @@
         break
       }
     }
+
     if (currentNetwork.chainId > 0) {
       handleCurrentRound(currentNetwork.chainId)
-      const hisRound = await handlePastRound(0)
+    }
+  })
+
+  watch([() => currentRound.number], async ([r]) => {
+    const data: any[] = []
+    for (let i = r; i > 0; i--) {
+      const hisRound = await handlePastRound(i)
       const hisRound0 = hisRound as unknown as RoundInfo
-      historyRounds.push({
+      data.push({
         number: hisRound0.index,
-        winners: hisRound0.users,
+        winners: hisRound0.winners,
+        users: hisRound0.users,
         prize: web3.utils.fromWei(hisRound0.prize, 'ether') + ' ETH',
+        wincode: hisRound0.wincode,
       })
+      historyRounds.splice(0, historyRounds.length, ...data)
     }
   })
 
@@ -190,7 +203,7 @@
           args: [],
         }).then((v: any) => {
           currentRound.number = v.index
-          currentRound.participants = v.users.length
+          currentRound.participants = v.users
           currentRound.prize = v.prize
         })
       }
@@ -225,6 +238,7 @@
       const receipt = await waitForTransaction({ hash })
       if (receipt.status == 'success') {
         init({ message: 'Success', color: 'success' })
+        handleCurrentRound(currentNetwork.chainId)
       } else {
         init({ message: 'Fail', color: 'danger' })
       }

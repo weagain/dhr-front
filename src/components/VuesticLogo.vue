@@ -1,5 +1,5 @@
 <template>
-  <img height="50" width="50" src="https://chain.fenus.xyz/images/logo/dhr_logo.png"/>
+  <img height="50" width="50" src="/dhr_logo.png" />
 </template>
 
 <script setup lang="ts">

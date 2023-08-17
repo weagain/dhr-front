@@ -55,23 +55,33 @@
     </va-card>
 
     <va-card class="col-span-12" style="margin-top: 25px">
-      <va-card-title>{{ t('round-info.past') }}</va-card-title>
-      <va-card-content>
-        <va-data-table :items="historyRounds" no-pagination>
-          <template #marker="props">
-            <va-icon name="fa fa-circle" :color="props.rowData.color" size="8px" />
-          </template>
+      <va-card-title>{{ t('tables.stripedHoverable') }}</va-card-title>
+      <va-card-content class="overflow-auto">
+        <table class="va-table va-table--striped va-table--hoverable w-full">
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>Users</th>
+              <th>Winner</th>
+              <th>Prize</th>
+              <th>WinCode</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-          <!-- <template #actions="props">
-            <va-button preset="plain" small color="gray" class="m-0" @click="alert(props.rowData)">
-              {{ t('tables.edit') }}
-            </va-button>
-
-            <va-button preset="plain" small color="danger" class="m-0">
-              {{ t('tables.delete') }}
-            </va-button>
-          </template> -->
-        </va-data-table>
+          <tbody>
+            <tr v-for="hr in historyRounds" :key="hr.id">
+              <td>{{ hr.number }}</td>
+              <td>{{ hr.users.length }}</td>
+              <td>{{ hr.winners }}</td>
+              <td>{{ hr.prize }}</td>
+              <td>{{ hr.wincode }}</td>
+              <td>
+                <va-badge :text="getRoundText(hr.number)" :color="getRoundColor(hr.number)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </va-card-content>
     </va-card>
   </div>
@@ -102,6 +112,28 @@
   const { colors } = useColors()
   const web3 = new Web3()
 
+  function getRoundText(round: number) {
+    if (round == currentRound.number) {
+      return 'Running'
+    }
+    return 'Done'
+  }
+
+  function getRoundColor(round: number) {
+    if (round == currentRound.number) {
+      return 'info'
+    }
+    return 'success'
+    // if (round === 'paid') {
+    //   return 'success'
+    // }
+
+    // if (round === 'processing') {
+    //   return 'info'
+    // }
+    // return 'danger'
+  }
+
   let currentRound = reactive({
     number: 0,
     participants: [''],
@@ -113,6 +145,8 @@
       number: 0,
       winners: [''],
       prize: '',
+      wincode: '',
+      users: [''],
     },
   ])
 

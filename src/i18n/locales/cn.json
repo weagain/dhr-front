@@ -15,6 +15,17 @@
     "past": "历史轮次信息",
     "round-num": "轮次编号",
     "round-participant": "参与人数",
-    "round-prize": "轮次奖励"
+    "round-prize": "轮次奖励",
+    "support-chains": "支持的链",
+    "introduction": "玩法介绍",
+    "details-1": "1.每轮需要16人参与。",
+    "details-2": "2.每人投入固定金额参与。",
+    "details-3": "3.凑齐16人后自动开奖。",
+    "details-4": "4.获胜者由特定算法决定。",
+    "details-5": "5.每轮可能无获胜者或多获胜者。",
+    "details-6": "6.无获胜者时，奖金进入下一轮。多获胜者时，奖金均分。",
+    "details-7": "7.一轮结束，自动启动下一轮。",
+    "details-8": "8.邀请别人参加，被邀请人中奖后，邀请人获得10%的奖金分享",
+    "invite-button": "复制邀请链接"
   }
 }

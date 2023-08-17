@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         name: 'index',
-        path: 'index',
+        path: 'index/:address?',
         component: () => import('../pages/dhr/index.vue'),
       },
     ],

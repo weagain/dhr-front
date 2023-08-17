@@ -79,8 +79,9 @@
             </va-card>
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="info">
               <va-card-content>
-                <h4 class="va-h4 m-1 text-white">{{ t('round-info.round-participant') }}</h4>
-                <p class="text-white">{{ currentRound.participants.length }}</p>
+                <h4 class="va-h4 m-1 text-white">
+                  {{ t('round-info.round-participant') }} - {{ currentRound.participants.length }}
+                </h4>
                 <p v-for="(item, index) in currentRound.participants" :key="index" class="text-white">{{ item }}</p>
               </va-card-content>
             </va-card>

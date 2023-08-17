@@ -65,8 +65,16 @@
           <div class="w-full pb-6 grid grid-cols-12 gap-6">
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="success">
               <va-card-content>
-                <h4 class="va-h4 m-1 text-white">{{ t('round-info.round-num') }}</h4>
-                <p class="text-white">#{{ currentRound.number }}</p>
+                <h4 class="va-h4 m-1 text-white">{{ t('round-info.round-num') }} - #{{ currentRound.number }}</h4>
+                <va-progress-circle
+                  :model-value="currentRound.roundProcess"
+                  :thickness="0.2"
+                  size="large"
+                  color="#ffffff"
+                  align="right"
+                >
+                  {{ currentRound.roundProcess + '%' }}
+                </va-progress-circle>
               </va-card-content>
             </va-card>
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="info">
@@ -183,6 +191,7 @@
     number: 0,
     participants: [''],
     prize: 0,
+    roundProcess: 0,
   })
 
   let historyRounds = reactive([
@@ -297,6 +306,7 @@
           currentRound.number = v.index
           currentRound.participants = v.users
           currentRound.prize = v.prize
+          currentRound.roundProcess = (v.users.length * 100) / 16
         })
       }
     })

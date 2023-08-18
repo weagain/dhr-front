@@ -4,7 +4,8 @@
     "simplified_chinese": "简体中文"
   },
   "nav": {
-    "message": "命运哈希轮"
+    "title": "命运哈希轮",
+    "message": "哈希的世界拥有公平"
   },
   "links": {
     "repository": "Github",

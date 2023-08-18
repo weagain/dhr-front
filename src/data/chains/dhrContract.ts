@@ -196,6 +196,7 @@ export interface NetModel {
   chainId: number
   chainName: string
   chainSymbol: string
+  coin: string
   textColor: string
   color: string
   contractAddr: string
@@ -203,21 +204,23 @@ export interface NetModel {
 }
 export const supportNetworks: NetModel[] = [
   {
+    chainId: 56,
+    chainName: 'Binance Smart Chain',
+    chainSymbol: 'BSC',
+    coin: 'BNB',
+    textColor: '#FFFFFF',
+    color: 'warning',
+    contractAddr: '0x50d6e5bea4CD1D9a166689f806CB744F0395041e',
+    contractAbi: crossTokenABI,
+  },
+  {
     chainId: 513100,
     chainName: 'EthereumFair',
     chainSymbol: 'ETHF',
+    coin: 'ETHF',
     textColor: '#FFFFFF',
     color: 'primary',
-    contractAddr: '0xf7B06C845CE05De7FD6db557e64584376E72FFCb',
+    contractAddr: '0xbF4564DeC02eF0A5EBCda3B398b7E1d8d0529236',
     contractAbi: crossTokenABI,
   },
-  // {
-  //   chainId: 56,
-  //   chainName: 'Binance Smart Chain',
-  //   chainSymbol: 'BSC',
-  //   textColor: '#FFFFFF',
-  //   color: 'warning',
-  //   contractAddr: '',
-  //   contractAbi: crossTokenABI,
-  // },
 ]

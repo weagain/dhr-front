@@ -88,7 +88,9 @@
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="danger">
               <va-card-content>
                 <h4 class="va-h4 m-1 text-white">{{ t('round-info.round-prize') }}</h4>
-                <p class="text-white">{{ web3.utils.fromWei(currentRound.prize, 'ether') }} ETH</p>
+                <p class="text-white">
+                  {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ currentNetwork.coin }} / {{web3.utils.fromWei(currentRound.bidValue, 'ether')}} {{ currentNetwork.coin }}
+                </p>
                 <va-card-actions align="right">
                   <va-button @click="handleInvite">Invite to Earn</va-button>
                   <va-button :loading="submitPlace" :disable="submitPlace" @click="handlePlaceBid">Place Joy</va-button>
@@ -117,13 +119,13 @@
 
           <tbody>
             <tr v-for="hr in historyRounds" :key="hr.id">
-              <td>{{ hr.number }}</td>
+              <td>{{ hr.index }}</td>
               <td>{{ hr.users.length }}</td>
               <td>{{ hr.winners }}</td>
               <td>{{ hr.prize }}</td>
               <td>{{ hr.wincode }}</td>
               <td>
-                <va-badge :text="getRoundText(hr.number)" :color="getRoundColor(hr.number)" />
+                <va-badge :text="getRoundText(hr)" :color="getRoundColor(hr)" />
               </td>
             </tr>
           </tbody>
@@ -167,6 +169,14 @@
     },
   })
 
+  interface RoundInfo {
+    index: number
+    users: string[]
+    prize: number
+    winners: string[]
+    wincode: number
+  }
+
   const { t } = useI18n()
   const { confirm } = useModal()
   const { init } = useToast()
@@ -174,16 +184,20 @@
   const route = useRoute()
   const web3 = new Web3()
 
-  function getRoundText(round: number) {
-    if (round == currentRound.number) {
+  function getRoundText(round: RoundInfo) {
+    if (round.index == currentRound.number) {
       return 'Running'
+    } else if (round.winners.length == 0) {
+      return 'Jackpot'
     }
     return 'Done'
   }
 
-  function getRoundColor(round: number) {
-    if (round == currentRound.number) {
+  function getRoundColor(round: RoundInfo) {
+    if (round.index == currentRound.number) {
       return 'info'
+    } else if (round.winners.length == 0) {
+      return 'danger'
     }
     return 'success'
   }
@@ -193,6 +207,7 @@
     participants: [''],
     prize: 0,
     roundProcess: 0,
+    bidValue: 0,
   })
 
   let historyRounds = reactive([
@@ -207,50 +222,32 @@
 
   let submitPlace = ref(false)
   let emp: any[] = []
-  let currentNetwork: NetModel = {
+  let currentNetwork = ref({
     chainId: 0,
     chainName: '',
     chainSymbol: '',
+    coin: '',
     textColor: '',
     color: '',
     contractAddr: '',
     contractAbi: emp,
-  }
+  })
 
-  interface RoundInfo {
-    index: number
-    users: string[]
-    prize: number
-    winners: string[]
-    wincode: number
-  }
   onMounted(async () => {
     for (const e of supportNetworks) {
       if (e.chainId == getNetwork().chain?.id) {
-        currentNetwork = e
+        currentNetwork.value = e
         break
       }
     }
 
-    if (currentNetwork.chainId > 0) {
-      handleCurrentRound(currentNetwork.chainId)
+    if (currentNetwork.value.chainId > 0) {
+      handleCurrentRound(currentNetwork.value.chainId)
     }
   })
 
   watch([() => currentRound.number], async ([r]) => {
-    const data: any[] = []
-    for (let i = r; i > 0; i--) {
-      const hisRound = await handlePastRound(i)
-      const hisRound0 = hisRound as unknown as RoundInfo
-      data.push({
-        number: hisRound0.index,
-        winners: hisRound0.winners,
-        users: hisRound0.users,
-        prize: web3.utils.fromWei(hisRound0.prize, 'ether') + ' ETH',
-        wincode: hisRound0.wincode,
-      })
-      historyRounds.splice(0, historyRounds.length, ...data)
-    }
+    handleAllPastRound(r)
   })
 
   const unwatch = watchNetwork((network) => {
@@ -263,6 +260,8 @@
     })
     if (selChain == 0) {
       init({ message: 'unsupport network', color: 'danger' })
+      // switch
+      handleSwithNetwork(supportNetworks[0].chainId)
     } else {
       handleCurrentRound(selChain)
     }
@@ -274,7 +273,12 @@
         const network = await switchNetwork({
           chainId: chainId,
         })
-        handleCurrentRound(chainId)
+        for (let e of supportNetworks) {
+          if (e.chainId == chainId) {
+            currentNetwork.value = e
+            handleCurrentRound(chainId)
+          }
+        }
       } catch (e) {
         init({ message: 'refuse to change network', color: 'danger' })
       }
@@ -294,6 +298,19 @@
     }
   }
 
+  const handleBidValue = async (chainId: number) => {
+
+    const _bidValue = await readContract({
+          address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
+          abi: currentNetwork.value.contractAbi,
+          functionName: 'betCost',
+          account: getAccount().address,
+          chainId: chainId,
+          args: [],
+        })
+    return _bidValue;
+  }
+
   const handleCurrentRound = async (chainId: number) => {
     supportNetworks.forEach((e: NetModel) => {
       if (e.chainId == chainId && e.contractAddr != '') {
@@ -302,12 +319,17 @@
           abi: e.contractAbi,
           functionName: 'currentRoundInfo',
           account: getAccount().address,
+          chainId: chainId,
           args: [],
         }).then((v: any) => {
           currentRound.number = v.index
           currentRound.participants = v.users
           currentRound.prize = v.prize
           currentRound.roundProcess = (v.users.length * 100) / 16
+          handleBidValue(chainId).then((b) => {
+            currentRound.bidValue = Number(b)
+          })
+          handleAllPastRound(v.index)
         })
       }
     })
@@ -316,12 +338,29 @@
   const handlePastRound = async (round: number) => {
     if (currentNetwork) {
       const hisRounds = await readContract({
-        address: `0x${currentNetwork.contractAddr.slice(2)}`,
-        abi: currentNetwork.contractAbi,
+        address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
+        abi: currentNetwork.value.contractAbi,
         functionName: 'historyRoundInfo',
+        chainId: currentNetwork.value.chainId,
         args: [round],
       })
       return hisRounds
+    }
+  }
+
+  const handleAllPastRound = async (currentRoundNumber: number) => {
+    const data: any[] = []
+    for (let i = currentRoundNumber; i > 0; i--) {
+      const hisRound = await handlePastRound(i)
+      const hisRound0 = hisRound as unknown as RoundInfo
+      data.push({
+        index: hisRound0.index,
+        winners: hisRound0.winners,
+        users: hisRound0.users,
+        prize: web3.utils.fromWei(hisRound0.prize, 'ether') + ' ' + currentNetwork.value.coin,
+        wincode: hisRound0.wincode,
+      })
+      historyRounds.splice(0, historyRounds.length, ...data)
     }
   }
 
@@ -335,23 +374,24 @@
 
     try {
       const { request: config } = await prepareWriteContract({
-        address: `0x${currentNetwork.contractAddr.slice(2)}`,
-        abi: currentNetwork.contractAbi,
+        address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
+        abi: currentNetwork.value.contractAbi,
         functionName: 'enjoy',
         args: [inviter],
-        value: BigInt(web3.utils.toWei('0.01', 'ether')),
+        value: BigInt(currentRound.bidValue),
       })
 
       const { hash } = await writeContract(config)
       const receipt = await waitForTransaction({ hash })
       if (receipt.status == 'success') {
         init({ message: 'Success', color: 'success' })
-        handleCurrentRound(currentNetwork.chainId)
+        handleCurrentRound(currentNetwork.value.chainId)
       } else {
         init({ message: 'Fail', color: 'danger' })
       }
     } catch (e) {
-      init({ message: 'Had joined or settling, Please try later', color: 'danger' })
+      console.log('e', e)
+      init({ message: 'Had joined or settling or Reverted By Errors, Please re-try', color: 'danger' })
     }
     submitPlace.value = false
   }

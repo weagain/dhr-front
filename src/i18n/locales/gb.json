@@ -4,8 +4,8 @@
     "simplified_chinese": "Simplified Chinese"
   },
   "nav": {
-    "title": "Destiny Hash Ring",
-    "message": "The world of hash possesses fairness"
+    "title": "Lucky Hash Ring",
+    "message": "Hash world possesses fairness"
   },
   "links": {
     "repository": "Github",
@@ -17,6 +17,7 @@
     "round-num": "Round Number",
     "round-participant": "Participants",
     "round-prize": "Round Prize",
+    "round-biz": "Bid Value",
     "support-chains": "Support Chains",
     "introduction": "How To Play",
     "details-1": "1.Each round requires 16 participants.",

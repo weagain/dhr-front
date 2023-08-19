@@ -1,7 +1,7 @@
 <template>
   <va-navbar class="app-layout-bottombar">
     <div class="app-bottombar-center">
-      <span class="hidden md:block mr-2">&copy; 2023 {{ t('nav.message') }}</span>
+      <span class="hidden md:block mr-2">&copy; 2023 {{ t('nav.title') }}</span>
       <va-button
         href="https://github.com/weagain/DestinyHashRing"
         color="#000000"
@@ -11,7 +11,7 @@
       >
         {{ t('links.repository') }}
       </va-button>
-      <va-button href="#" color="#3C8FCC" class="hidden lg:block" icon="telegram" target="_blank">
+      <va-button href="https://t.me/hashbid" color="#3C8FCC" class="hidden lg:block" icon="telegram" target="_blank">
         {{ t('links.community') }}
       </va-button>
     </div>

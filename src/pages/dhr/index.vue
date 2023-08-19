@@ -87,9 +87,12 @@
             </va-card>
             <va-card class="col-span-12 sm:col-span-4 mb-8" color="danger">
               <va-card-content>
-                <h4 class="va-h4 m-1 text-white">{{ t('round-info.round-prize') }}</h4>
+                <h4 class="va-h4 m-1 text-white">
+                  {{ t('round-info.round-prize') }} / {{ t('round-info.round-bid') }}
+                </h4>
                 <p class="text-white">
-                  {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ currentNetwork.coin }} / {{web3.utils.fromWei(currentRound.bidValue, 'ether')}} {{ currentNetwork.coin }}
+                  {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ currentNetwork.coin }} /
+                  {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }} {{ currentNetwork.coin }}
                 </p>
                 <va-card-actions align="right">
                   <va-button @click="handleInvite">Invite to Earn</va-button>
@@ -299,16 +302,15 @@
   }
 
   const handleBidValue = async (chainId: number) => {
-
     const _bidValue = await readContract({
-          address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
-          abi: currentNetwork.value.contractAbi,
-          functionName: 'betCost',
-          account: getAccount().address,
-          chainId: chainId,
-          args: [],
-        })
-    return _bidValue;
+      address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
+      abi: currentNetwork.value.contractAbi,
+      functionName: 'betCost',
+      account: getAccount().address,
+      chainId: chainId,
+      args: [],
+    })
+    return _bidValue
   }
 
   const handleCurrentRound = async (chainId: number) => {
@@ -336,7 +338,7 @@
   }
 
   const handlePastRound = async (round: number) => {
-    if (currentNetwork) {
+    if (currentNetwork.value) {
       const hisRounds = await readContract({
         address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
         abi: currentNetwork.value.contractAbi,

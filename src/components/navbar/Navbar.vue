@@ -14,7 +14,7 @@
       </div>
     </template>
     <div class="app-navbar-center">
-      <span class="hidden md:block mr-3 va-h3 text-white">{{ t('nav.title') }}</span>
+      <span class="hidden md:block mr-3 va-h3 text-white">{{ t('nav.message') }}</span>
       <!-- <va-button
         href="https://github.com/weagain/DestinyHashRing"
         color="#000000"

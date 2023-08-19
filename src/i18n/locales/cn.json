@@ -4,7 +4,7 @@
     "simplified_chinese": "简体中文"
   },
   "nav": {
-    "title": "命运哈希轮",
+    "title": "幸运哈希轮",
     "message": "哈希的世界拥有公平"
   },
   "links": {
@@ -17,6 +17,7 @@
     "round-num": "轮次编号",
     "round-participant": "参与人数",
     "round-prize": "轮次奖励",
+    "round-biz": "参与价格",
     "support-chains": "支持的链",
     "introduction": "玩法介绍",
     "details-1": "1.每轮需要16人参与。",

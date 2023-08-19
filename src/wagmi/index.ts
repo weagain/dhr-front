@@ -54,17 +54,7 @@ const ZORA = {
 }
 
 const projectId = 'e11ce12de4dc6960bdfba128a9a31ff4'
-const { chains, publicClient } = configureChains(
-  [mainnet, bsc, ETHF, ZORA],
-  [
-    w3mProvider({ projectId }),
-    jsonRpcProvider({
-      rpc: (chain: any) => ({
-        http: `https://etherfair.org`,
-      }),
-    }),
-  ],
-)
+const { chains, publicClient } = configureChains([mainnet, bsc, ETHF, ZORA], [w3mProvider({ projectId })])
 const w3mconnectors = w3mConnectors({ projectId, chains })
 const wagmiConfig = createConfig({
   autoConnect: true,

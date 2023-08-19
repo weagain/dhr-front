@@ -95,7 +95,7 @@
                   {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }} {{ currentNetwork.coin }}
                 </p>
                 <va-card-actions align="right">
-                  <va-button @click="handleInvite">Invite to Earn</va-button>
+                  <va-button @click="handleInvite">Tweet to Earn</va-button>
                   <va-button :loading="submitPlace" :disable="submitPlace" @click="handlePlaceBid">Place Joy</va-button>
                 </va-card-actions>
               </va-card-content>
@@ -151,6 +151,7 @@
     switchNetwork,
     watchNetwork,
     watchAccount,
+    getConfig,
   } from '@wagmi/core'
   import { Web3 } from 'web3'
   import { validator } from 'web3-validator'
@@ -166,6 +167,7 @@
   import { wagmiConfig, projectId, chains, w3mconnectors } from '../../wagmi'
 
   import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+  import { setTimeout } from 'node:timers/promises'
   const connector = new WalletConnectConnector({
     options: {
       projectId: projectId,
@@ -238,9 +240,16 @@
 
   onMounted(async () => {
     for (const e of supportNetworks) {
-      if (e.chainId == getNetwork().chain?.id) {
-        currentNetwork.value = e
-        break
+      if (route.params.chain) {
+        console.log('e.chainId==chain', e.chainId.toString() == route.params.chain.toString())
+        if (e.chainId.toString() == route.params.chain.toString()) {
+          // await handleSwithNetwork(e.chainId);
+        }
+      } else {
+        if (e.chainId == getNetwork().chain?.id) {
+          currentNetwork.value = e
+          break
+        }
       }
     }
 
@@ -283,6 +292,7 @@
           }
         }
       } catch (e) {
+        console.log('switch network error:', e)
         init({ message: 'refuse to change network', color: 'danger' })
       }
     }
@@ -294,7 +304,13 @@
       return
     }
     try {
-      await navigator.clipboard.writeText('https://chaingam.fenus.xyz/dhr/index/' + getAccount().address)
+      const currentWallet: string = getAccount().address as string
+      const requestChain: string = route.params.chain as string
+      const currentChain: string = getNetwork().chain?.id?.toString() || ''
+      let uri: string =
+        'https://hash.bid/dhr/index/' + currentWallet + '/' + (requestChain ? requestChain : currentChain)
+      console.log('uri:', uri)
+      await navigator.clipboard.writeText(uri)
       console.log('Text copied to clipboard')
     } catch (err) {
       console.error('Failed to copy text: ', err)
@@ -398,9 +414,9 @@
   }
 
   const handleInvite = () => {
-    let backUri = encodeURIComponent('https://https://chaingam.fenus.xyz/dhr/index?w=' + getAccount().address)
-    let content = "I'm spinning the wheel of fate hash. Come join me and win a prize! \n"
-    content += '#DestinyHashRing #DHR\n'
+    let backUri = encodeURIComponent('https://https://hash.bid/dhr/index?w=' + getAccount().address)
+    let content = "I'm spinning the wheel of hash. Come join me and win a prize! \n"
+    content += '#DestinyHashRing #DHR #HashWorld\n'
     content += '📍Click to join & win money\n'
     let text = encodeURIComponent(content)
 

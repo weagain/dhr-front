@@ -28,9 +28,34 @@ const ETHF = {
   },
 }
 
+const ZORA = {
+  id: 7777777,
+  name: 'Zora Network',
+  network: 'Zora',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'ETH',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.zora.energy'],
+    },
+    public: {
+      http: ['https://rpc.zora.energy'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Zora Explorer',
+      url: 'https://explorer.zora.energy',
+    },
+  },
+}
+
 const projectId = 'e11ce12de4dc6960bdfba128a9a31ff4'
 const { chains, publicClient } = configureChains(
-  [mainnet, bsc, ETHF],
+  [mainnet, bsc, ETHF, ZORA],
   [
     w3mProvider({ projectId }),
     jsonRpcProvider({

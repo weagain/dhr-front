@@ -373,7 +373,6 @@
     if (route.params.address && !validator.validate(['address'], [route.params.address], { silent: true })) {
       inviter = route.params.address as string
     }
-
     try {
       const { request: config } = await prepareWriteContract({
         address: `0x${currentNetwork.value.contractAddr.slice(2)}`,

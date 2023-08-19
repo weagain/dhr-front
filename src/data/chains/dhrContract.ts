@@ -204,6 +204,16 @@ export interface NetModel {
 }
 export const supportNetworks: NetModel[] = [
   {
+    chainId: 7777777,
+    chainName: 'ZORA Network',
+    chainSymbol: 'Zora',
+    coin: 'ETH',
+    textColor: '#FFFFFF',
+    color: '#000000',
+    contractAddr: '0x111cdBF288C9613019c9c324D9E9AC7e9a71e2d5',
+    contractAbi: crossTokenABI,
+  },
+  {
     chainId: 56,
     chainName: 'Binance Smart Chain',
     chainSymbol: 'BSC',

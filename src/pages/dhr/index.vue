@@ -332,6 +332,7 @@
   const handleCurrentRound = async (chainId: number) => {
     supportNetworks.forEach((e: NetModel) => {
       if (e.chainId == chainId && e.contractAddr != '') {
+        submitPlace.value = true
         readContract({
           address: `0x${e.contractAddr.slice(2)}`,
           abi: e.contractAbi,
@@ -339,16 +340,22 @@
           account: getAccount().address,
           chainId: chainId,
           args: [],
-        }).then((v: any) => {
-          currentRound.number = v.index
-          currentRound.participants = v.users
-          currentRound.prize = v.prize
-          currentRound.roundProcess = (v.users.length * 100) / 16
-          handleBidValue(chainId).then((b) => {
-            currentRound.bidValue = Number(b)
-          })
-          handleAllPastRound(v.index)
         })
+          .then((v: any) => {
+            currentRound.number = v.index
+            currentRound.participants = v.users
+            currentRound.prize = v.prize
+            currentRound.roundProcess = (v.users.length * 100) / 16
+            handleBidValue(chainId).then((b) => {
+              currentRound.bidValue = Number(b)
+            })
+            submitPlace.value = false
+            handleAllPastRound(v.index)
+          })
+          .catch((e: any) => {
+            submitPlace.value = false
+            init({ message: 'Network Error, please refresh page', color: 'danger' })
+          })
       }
     })
   }

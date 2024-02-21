@@ -2,12 +2,11 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
-    extend: {
-    },
+    extend: {},
     colors: {
-      'main': '#FCFC03',
-      'white': '#FFFFFF',
-      'black': '#333333',
+      main: '#FCFC03',
+      white: '#FFFFFF',
+      black: '#333333',
     },
     screens: {
       xs: '0px',
@@ -17,11 +16,11 @@ module.exports = {
       xl: '1200px',
     },
     fontFamily: {
-      'cpl': ['ChakraPetch-Light'],
-      'otb': ['Orbitron-Black'],
-      'otr': ['Orbitron-Regular'],
-      'otsb': ['Orbitron-SemiBold'],
-    }
+      cpl: ['ChakraPetch-Light'],
+      otb: ['Orbitron-Black'],
+      otr: ['Orbitron-Regular'],
+      otsb: ['Orbitron-SemiBold'],
+    },
   },
   plugins: [],
 }

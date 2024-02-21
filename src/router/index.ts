@@ -22,6 +22,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'turntable',
     path: '/turntable',
+    redirect: '/turntable/index',
     component: AppLayout,
     children: [
       {

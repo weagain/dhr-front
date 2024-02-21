@@ -165,7 +165,7 @@
       const requestChain: string = route.params.chain as string
       const currentChain: string = getNetwork().chain?.id?.toString() || ''
       let uri: string =
-        'https://hash.bid/dhr/index/' + currentWallet + '/' + (requestChain ? requestChain : currentChain)
+        'https://hash.bid/turntable/index/' + currentWallet + '/' + (requestChain ? requestChain : currentChain)
       console.log('uri:', uri)
       await navigator.clipboard.writeText(uri)
       copyText.value = 'Copyed'
@@ -283,7 +283,7 @@
   }
 
   const handleInvite = () => {
-    let backUri = encodeURIComponent('https://https://hash.bid/dhr/index?w=' + getAccount().address)
+    let backUri = encodeURIComponent('https://https://hash.bid/turntable/index?w=' + getAccount().address)
     let content = "I'm spinning the wheel of hash. Come join me and win a prize! \n"
     content += '#DestinyHashRing #DHR #HashWorld\n'
     content += '📍Click to join & win money\n'

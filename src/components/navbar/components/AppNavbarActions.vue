@@ -1,8 +1,8 @@
 <template>
   <div class="app-navbar-actions">
-    <color-dropdown class="app-navbar-actions__item" />
+    <!-- <color-dropdown class="app-navbar-actions__item" /> -->
     <settings-dropdown class="app-navbar-actions__item" />
-    <language-dropdown class="app-navbar-actions__item" />
+    <!-- <language-dropdown class="app-navbar-actions__item" /> -->
     <w3m-core-button class="w3m-core-button"></w3m-core-button>
   </div>
 </template>

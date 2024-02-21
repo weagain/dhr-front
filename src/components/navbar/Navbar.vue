@@ -2,19 +2,19 @@
   <va-navbar class="app-layout-navbar">
     <template #left>
       <div class="left">
-        <va-icon-menu-collapsed
+        <!-- <va-icon-menu-collapsed
           :class="{ 'x-flip': isSidebarMinimized }"
           class="va-navbar__item"
           :color="colors.primary"
           @click="isSidebarMinimized = !isSidebarMinimized"
-        />
+        /> -->
         <router-link to="/">
           <vuestic-logo class="logo" />
         </router-link>
       </div>
     </template>
     <div class="app-navbar-center">
-      <span class="hidden md:block mr-3 va-h3 text-white">{{ t('nav.message') }}</span>
+      <!-- <span class="hidden md:block mr-3 va-h3 text-white">{{ t('nav.message') }}</span> -->
       <!-- <va-button
         href="https://github.com/weagain/DestinyHashRing"
         color="#000000"
@@ -52,8 +52,10 @@
 
 <style lang="scss" scoped>
   .va-navbar {
-    box-shadow: var(--va-box-shadow);
     z-index: 2;
+    padding: 6px 10px;
+    color: white;
+    background-color: black !important;
 
     @media screen and (max-width: 950px) {
       .left {
@@ -66,9 +68,6 @@
         justify-content: space-between;
       }
     }
-
-    background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-    color: white;
     // padding: 10px 5%;
     // position: fixed;
     // z-index: 10;

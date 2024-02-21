@@ -39,8 +39,9 @@
 
 <style lang="scss" scoped>
   .va-navbar {
-    box-shadow: var(--va-box-shadow);
+    background-color: black !important;
     z-index: 2;
+    color: white !important;
 
     @media screen and (max-width: 950px) {
       .left {
@@ -54,8 +55,7 @@
       }
     }
 
-    background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-    color: white;
+    // background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
   }
 
   .left {
@@ -91,16 +91,5 @@
         display: none;
       }
     }
-  }
-
-  .bottom-bar {
-    background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-    color: white;
-    padding: 10px 5%;
-    position: fixed;
-    width: 90%;
-    z-index: 10;
-    display: flex;
-    justify-content: space-between;
   }
 </style>

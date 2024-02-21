@@ -19,6 +19,18 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    name: 'turntable',
+    path: '/turntable',
+    component: AppLayout,
+    children: [
+      {
+        name: 'turntable',
+        path: 'index/:address?/:chain?',
+        component: () => import('../pages/turntable/index.vue'),
+      },
+    ],
+  },
 ]
 
 const router = createRouter({

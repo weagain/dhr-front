@@ -38,3 +38,28 @@ pre {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+
+@font-face {
+  font-family: "ChakraPetch-Light";
+  src:
+    url("/src/fonts/chakraPetch/ChakraPetch-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron-Black";
+  src:
+    url("/src/fonts/orbitron/Orbitron-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron-Regular";
+  src:
+    url("/src/fonts/orbitron/Orbitron-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Orbitron-SemiBold";
+  src:
+    url("/src/fonts/orbitron/Orbitron-SemiBold.ttf") format("truetype");
+}

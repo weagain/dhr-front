@@ -3,7 +3,7 @@
     <navbar />
     <div class="app-layout__content">
       <div class="app-layout__page">
-        <div class="p-2 md:px-6 md:py-9">
+        <div class="p-4">
           <router-view />
         </div>
       </div>
@@ -75,16 +75,16 @@
   $tabletBreakPointPX: 768px;
 
   .app-layout {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: black;
     &__navbar {
       min-height: 4rem;
     }
 
     &__content {
       display: flex;
-      height: calc(100vh - 4rem);
       flex: 1;
 
       @media screen and (max-width: $tabletBreakPointPX) {

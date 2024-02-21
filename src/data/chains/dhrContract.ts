@@ -233,4 +233,14 @@ export const supportNetworks: NetModel[] = [
     contractAddr: '0xbF4564DeC02eF0A5EBCda3B398b7E1d8d0529236',
     contractAbi: crossTokenABI,
   },
+  {
+    chainId: 168587773,
+    chainName: 'BLAST Sepolia',
+    chainSymbol: 'ETH',
+    coin: 'ETH',
+    textColor: '#FF00FF',
+    color: 'primary',
+    contractAddr: '0x50d6e5bea4CD1D9a166689f806CB744F0395041e',
+    contractAbi: crossTokenABI,
+  },
 ]

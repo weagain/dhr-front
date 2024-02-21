@@ -5,7 +5,7 @@ import AppLayout from '../layouts/AppLayout.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:catchAll(.*)',
-    redirect: { name: 'index' },
+    redirect: { name: 'turntable' },
   },
   {
     name: 'dhr',

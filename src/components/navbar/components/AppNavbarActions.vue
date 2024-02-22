@@ -3,6 +3,7 @@
     <!-- <color-dropdown class="app-navbar-actions__item" /> -->
     <settings-dropdown class="app-navbar-actions__item" />
     <!-- <language-dropdown class="app-navbar-actions__item" /> -->
+    <NetworkDropdown />
     <w3m-core-button class="w3m-core-button"></w3m-core-button>
   </div>
 </template>
@@ -10,6 +11,7 @@
 <script setup lang="ts">
   import LanguageDropdown from './dropdowns/LanguageDropdown.vue'
   import ColorDropdown from './dropdowns/ColorDropdown.vue'
+  import NetworkDropdown from './dropdowns/NetworkDropdown.vue'
   import { useGlobalStore } from '../../../stores/global-store'
   import { EthereumClient } from '@web3modal/ethereum'
   import { Web3Modal } from '@web3modal/html'

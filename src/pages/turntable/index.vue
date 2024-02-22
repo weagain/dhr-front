@@ -15,6 +15,7 @@
   import { useForm, useModal, useToast, useColors } from 'vuestic-ui'
   import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
+  import { useGlobalStore } from '../../stores/global-store'
   import { supportNetworks, NetModel } from '../../data/chains/dhrContract'
   import RoundAnimate from '../../components/roundAnimate/index.vue'
   import Loading from '../../components/icons/Loading.vue'
@@ -41,6 +42,7 @@
   const { confirm } = useModal()
   const { init } = useToast()
   const { colors } = useColors()
+  const authStore = useGlobalStore()
   const route = useRoute()
   const web3 = new Web3()
   const copyText = ref<string>('Invitation link')
@@ -104,6 +106,7 @@
       } else {
         if (e.chainId == getNetwork().chain?.id) {
           currentNetwork.value = e
+          authStore.setCurrentNetwork(e)
           break
         }
       }
@@ -145,6 +148,7 @@
         for (let e of supportNetworks) {
           if (e.chainId == chainId) {
             currentNetwork.value = e
+            authStore.setCurrentNetwork(currentNetwork.value)
             handleCurrentRound(chainId)
           }
         }
@@ -245,7 +249,10 @@
         index: hisRound0.index,
         winners: hisRound0.winners,
         users: hisRound0.users,
-        prize: (prizeString == '0' ? '0' : web3.utils.fromWei(prizeString, 'ether')) + ' ' + currentNetwork.value.coin,
+        prize:
+          (prizeString == '0' ? '0' : web3.utils.fromWei(prizeString, 'ether')) +
+          ' ' +
+          authStore.getCurrentNetwork?.chainSymbol,
         wincode: hisRound0.wincode,
       })
       historyRounds.splice(0, historyRounds.length, ...data)
@@ -326,8 +333,8 @@
             </h2>
             <div class="flex gap-x-4 items-center justify-between">
               <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 mt-2 inline-block">
-                {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ currentNetwork.coin }} /
-                {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }} {{ currentNetwork.coin }}
+                {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }} /
+                {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }}
               </h2>
               <button
                 class="submit-button relative z-20 font-otb"

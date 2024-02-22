@@ -31,7 +31,7 @@
   })
 
   interface RoundInfo {
-    index: number
+    index: number | bigint
     number: number
     winners: string[]
     prize: number
@@ -120,7 +120,7 @@
   })
 
   watch([() => currentRound.number], async ([r]) => {
-    handleAllPastRound(r)
+    handleAllPastRound(BigInt(r))
   })
 
   const unwatch = watchNetwork((network) => {

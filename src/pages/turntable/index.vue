@@ -234,16 +234,18 @@
     }
   }
 
-  const handleAllPastRound = async (currentRoundNumber: number) => {
+  const handleAllPastRound = async (currentRoundNumber: bigint) => {
     const data: any[] = []
-    for (let i = currentRoundNumber; i > 0; i--) {
+    if (currentRoundNumber == 1n) return
+    for (let i = Number(currentRoundNumber - 1n); i > 0; i--) {
       const hisRound = await handlePastRound(i)
       const hisRound0 = hisRound as unknown as RoundInfo
+      const prizeString = hisRound0.prize.toString()
       data.push({
         index: hisRound0.index,
         winners: hisRound0.winners,
         users: hisRound0.users,
-        prize: web3.utils.fromWei(hisRound0.prize, 'ether') + ' ' + currentNetwork.value.coin,
+        prize: (prizeString == '0' ? '0' : web3.utils.fromWei(prizeString, 'ether')) + ' ' + currentNetwork.value.coin,
         wincode: hisRound0.wincode,
       })
       historyRounds.splice(0, historyRounds.length, ...data)
@@ -387,10 +389,10 @@
       </thead>
 
       <tbody>
-        <tr v-for="hr in historyRounds" :key="hr.id">
+        <tr v-for="(hr, index) in historyRounds" :key="index">
           <td>{{ hr.index }}</td>
           <td>{{ hr.users.length }}</td>
-          <td>{{ hr.winners }}</td>
+          <td>{{ hr.winners?.length > 0 ? hr.winners : '-No Winner-' }}</td>
           <td>{{ hr.prize }}</td>
           <td>{{ hr.wincode }}</td>
           <td>
@@ -447,7 +449,10 @@
       font-family: 'Orbitron-SemiBold';
       color: #fcfc03;
     }
+    tr {
+    }
     td {
+      background-color: black !important;
       color: white;
     }
   }

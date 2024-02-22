@@ -1,18 +1,18 @@
 import { defineStore } from 'pinia'
 
+interface Network {
+  chainId: number | string
+  chainName: string
+  chainSymbol: string
+  coin: string
+  textColor: string
+  color: string
+  contractAddr: string
+  contractAbi: any[]
+}
+
 export const useGlobalStore = defineStore('global', {
   state: () => {
-    interface Network {
-      chainId: number | string
-      chainName: string
-      chainSymbol: string
-      coin: string
-      textColor: string
-      color: string
-      contractAddr: string
-      contractAbi: any[]
-    }
-
     interface AppState {
       isSidebarMinimized: boolean
       userName: string
@@ -55,7 +55,7 @@ export const useGlobalStore = defineStore('global', {
       this.userChainId = address
     },
 
-    setCurrentNetwork(chain: object) {
+    setCurrentNetwork(chain: Network) {
       this._currentNetwork = chain
     },
   },

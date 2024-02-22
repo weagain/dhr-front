@@ -32,10 +32,11 @@
 
   interface RoundInfo {
     index: number
-    users: string[]
-    prize: number
+    number: number
     winners: string[]
+    prize: number
     wincode: number
+    users: string[]
   }
 
   const { t } = useI18n()
@@ -75,6 +76,7 @@
 
   let historyRounds = reactive([
     {
+      index: 0,
       number: 0,
       winners: [''],
       prize: '',

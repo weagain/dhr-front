@@ -102,15 +102,15 @@
     for (const e of supportNetworks) {
       if (route.params.chain) {
         console.log('e.chainId==chain', e.chainId.toString() == route.params.chain.toString())
+        // 邀请 chainid 在允许网络内
         if (e.chainId.toString() == route.params.chain.toString()) {
           // await handleSwithNetwork(e.chainId);
         }
-      } else {
-        if (e.chainId == getNetwork().chain?.id) {
-          currentNetwork.value = e
-          authStore.setCurrentNetwork(e)
-          break
-        }
+      }
+      if (e.chainId == getNetwork().chain?.id) {
+        currentNetwork.value = e
+        authStore.setCurrentNetwork(e)
+        break
       }
     }
 
@@ -136,7 +136,9 @@
       init({ message: 'unsupport network', color: 'danger' })
       // switch
       handleSwithNetwork(supportNetworks[0].chainId)
+      authStore.setCurrentNetwork(null)
     } else {
+      console.log('network >>>> >>>', network)
       handleCurrentRound(selChain)
     }
   })
@@ -186,8 +188,8 @@
 
   const handleBidValue = async (chainId: number) => {
     const _bidValue = await readContract({
-      address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
-      abi: currentNetwork.value.contractAbi,
+      address: `0x${authStore.getCurrentNetwork?.contractAddr.slice(2)}`,
+      abi: authStore.getCurrentNetwork?.contractAbi || [],
       functionName: 'betCost',
       account: getAccount().address,
       chainId: chainId,
@@ -445,9 +447,11 @@
     border-radius: 6px;
     clip-path: polygon(20px 0, 100% 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 0 50%);
     transition: all 0.3s;
+
     &:hover {
       background: white;
     }
+
     &[disabled] {
       cursor: not-allowed;
     }
@@ -458,8 +462,10 @@
       font-family: 'Orbitron-SemiBold';
       color: #fcfc03;
     }
+
     tr {
     }
+
     td {
       background-color: black !important;
       color: white;

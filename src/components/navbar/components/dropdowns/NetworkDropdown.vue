@@ -36,7 +36,12 @@
 <template>
   <va-dropdown class="language-dropdown" stick-to-edges>
     <template #anchor>
-      <VaButton preset="secondary" border-color="primary">{{ authStore.getCurrentNetwork?.chainName }}</VaButton>
+      <div class="migration-wrapper">
+        <div class="migration-inner">{{ authStore.getCurrentNetwork?.chainName || 'Network Error' }}</div>
+      </div>
+      <VaButton preset="secondary" border-color="primary">{{
+        authStore.getCurrentNetwork?.chainName || 'Network Error'
+      }}</VaButton>
     </template>
 
     <va-dropdown-content class="language-dropdown__content pl-8 pr-8 pt-2 pb-2">
@@ -56,6 +61,21 @@
   .network-item {
     &:hover {
       color: #b4b400;
+    }
+  }
+  .migration-wrapper {
+    padding: 1px;
+    clip-path: polygon(100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px, 12px 0);
+    background: #fcfc03;
+    border-radius: 3px;
+    color: #fcfc03;
+
+    .migration-inner {
+      // height: 218px;
+      padding: 10px 20px;
+      border-radius: 3px;
+      clip-path: polygon(100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px, 12px 0);
+      background: black;
     }
   }
 </style>

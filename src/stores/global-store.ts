@@ -55,7 +55,7 @@ export const useGlobalStore = defineStore('global', {
       this.userChainId = address
     },
 
-    setCurrentNetwork(chain: Network) {
+    setCurrentNetwork(chain: Network | null) {
       this._currentNetwork = chain
     },
   },

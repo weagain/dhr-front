@@ -832,7 +832,7 @@ export const supportNetworks: NetModel[] = [
   },
   {
     chainId: 513100,
-    chainName: 'DISChain',
+    chainName: 'Disney Chain',
     chainSymbol: 'DIS',
     coin: 'DIS',
     textColor: '#FFFFFF',

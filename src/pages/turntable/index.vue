@@ -75,16 +75,18 @@
     bidValue: 0,
   })
 
-  let historyRounds = reactive([
-    {
-      index: 0,
-      number: 0,
-      winners: [''],
-      prize: '',
-      wincode: '',
-      users: [''],
-    },
-  ])
+  let historyRounds = reactive({
+    list: [
+      {
+        index: 0,
+        number: 0,
+        winners: [''],
+        prize: '',
+        wincode: '',
+        users: [''],
+      },
+    ],
+  })
 
   let submitPlace = ref(false)
   let emp: any[] = []
@@ -134,12 +136,23 @@
       }
     })
     if (selChain == 0) {
-      init({ message: 'unsupport network', color: 'danger' })
+      init({ message: 'unsupport network', color: 'warning' })
       // switch
       handleSwithNetwork(supportNetworks[0].chainId)
       authStore.setCurrentNetwork(null)
     } else {
       console.log('network >>>> >>>', network)
+      // 初始化
+      historyRounds.list = [
+        {
+          index: 0,
+          number: 0,
+          winners: [''],
+          prize: '',
+          wincode: '',
+          users: [''],
+        },
+      ]
       handleCurrentRound(selChain)
     }
   })
@@ -159,14 +172,14 @@
         }
       } catch (e) {
         console.log('switch network error:', e)
-        init({ message: 'refuse to change network', color: 'danger' })
+        init({ message: 'refuse to change network', color: 'warning' })
       }
     }
   }
 
   const copyInviteUrl = async () => {
     if (!getAccount().address) {
-      init({ message: 'Please Connect Wallet First', color: 'danger' })
+      init({ message: 'Please Connect Wallet First', color: 'warning' })
       return
     }
     try {
@@ -224,7 +237,7 @@
           })
           .catch((e: any) => {
             submitPlace.value = false
-            init({ message: 'Network Error, please refresh page', color: 'danger' })
+            init({ message: 'Network Error, please refresh page', color: 'warning' })
           })
       }
     })
@@ -233,10 +246,10 @@
   const handlePastRound = async (round: number) => {
     if (currentNetwork.value) {
       const hisRounds = await readContract({
-        address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
-        abi: currentNetwork.value.contractAbi,
+        address: `0x${authStore.getCurrentNetwork?.contractAddr.slice(2)}`,
+        abi: authStore.getCurrentNetwork?.contractAbi || [],
         functionName: 'historyRoundInfo',
-        chainId: currentNetwork.value.chainId,
+        chainId: authStore.getCurrentNetwork?.chainId,
         args: [round],
       })
       return hisRounds
@@ -260,7 +273,7 @@
           authStore.getCurrentNetwork?.chainSymbol,
         wincode: hisRound0.wincode,
       })
-      historyRounds.splice(0, historyRounds.length, ...data)
+      historyRounds.list.splice(0, historyRounds.list.length, ...data)
     }
   }
 
@@ -306,10 +319,9 @@
         init({ message: 'Fail', color: 'danger' })
       }
       submitPlace.value = false
-    } catch (e) {
+    } catch (e: any) {
       submitPlace.value = false
-      console.log('e', e)
-      init({ message: 'Had joined or settling or Reverted By Errors, Please re-try', color: 'danger' })
+      init({ message: e.message, color: 'danger' })
     }
   }
 
@@ -418,7 +430,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="(hr, index) in historyRounds" :key="index">
+        <tr v-for="(hr, index) in historyRounds.list" :key="index">
           <td>{{ hr.index }}</td>
           <td>{{ hr.users.length }}</td>
           <td>{{ hr.winners?.length > 0 ? hr.winners : '-No Winner-' }}</td>

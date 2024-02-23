@@ -813,7 +813,7 @@ export const supportNetworks: NetModel[] = [
   {
     chainId: 7777777,
     chainName: 'ZORA Network',
-    chainSymbol: 'Zora',
+    chainSymbol: 'ETH',
     coin: 'ETH',
     textColor: '#FFFFFF',
     color: '#000000',
@@ -823,7 +823,7 @@ export const supportNetworks: NetModel[] = [
   {
     chainId: 56,
     chainName: 'Binance Smart Chain',
-    chainSymbol: 'BSC',
+    chainSymbol: 'BNB',
     coin: 'BNB',
     textColor: '#FFFFFF',
     color: 'warning',

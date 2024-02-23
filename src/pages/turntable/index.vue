@@ -10,6 +10,7 @@
     switchNetwork,
     watchNetwork,
   } from '@wagmi/core'
+  import { Chain } from '@wagmi/core/chains'
   import { Web3 } from 'web3'
   import { validator } from 'web3-validator'
   import { ref, reactive, watch, onMounted } from 'vue'
@@ -132,14 +133,17 @@
     supportNetworks.forEach((e) => {
       if (e.chainId == network.chain?.id) {
         selChain = e.chainId
+        if (!authStore.getCurrentNetwork) {
+          authStore.setCurrentNetwork(e)
+        }
         return
       }
     })
     if (selChain == 0) {
-      init({ message: 'unsupport network', color: 'warning' })
       // switch
       handleSwithNetwork(supportNetworks[0].chainId)
       authStore.setCurrentNetwork(null)
+      init({ message: 'unsupport network', color: 'warning' })
     } else {
       console.log('network >>>> >>>', network)
       // 初始化
@@ -421,22 +425,22 @@
       <thead>
         <tr>
           <th>Round</th>
-          <th class="hidden md:initial">Users</th>
+          <th class="hidden md:table-cell">Users</th>
           <th>Winner</th>
-          <th class="hidden md:initial">Prize</th>
-          <th class="hidden md:initial">WinCode</th>
-          <th class="hidden md:initial">Status</th>
+          <th class="hidden md:table-cell">Prize</th>
+          <th class="hidden md:table-cell">WinCode</th>
+          <th class="hidden md:table-cell">Status</th>
         </tr>
       </thead>
 
       <tbody>
         <tr v-for="(hr, index) in historyRounds.list" :key="index">
           <td>{{ hr.index }}</td>
-          <td class="hidden md:initial">{{ hr.users.length }}</td>
+          <td class="hidden md:table-cell">{{ hr.users.length }}</td>
           <td>{{ hr.winners?.length > 0 ? hr.winners : '-No Winner-' }}</td>
-          <td class="hidden md:initial">{{ hr.prize }}</td>
-          <td class="hidden md:initial">{{ hr.wincode }}</td>
-          <td class="hidden md:initial">
+          <td class="hidden md:table-cell">{{ hr.prize }}</td>
+          <td class="hidden md:table-cell">{{ hr.wincode }}</td>
+          <td class="hidden md:table-cell">
             <va-badge :text="getRoundText(hr)" :color="getRoundColor(hr)" />
           </td>
         </tr>

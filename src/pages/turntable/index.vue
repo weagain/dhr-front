@@ -2,6 +2,7 @@
   import {
     prepareWriteContract,
     getAccount,
+    fetchBalance,
     writeContract,
     waitForTransaction,
     readContract,
@@ -266,6 +267,23 @@
   const handlePlaceBid = async () => {
     submitPlace.value = true
     let inviter = '0x0000000000000000000000000000000000000000'
+
+    let address = getAccount().address
+    if (!address) {
+      submitPlace.value = false
+      return init({ message: 'Please connect the wallet.', color: 'danger' })
+    }
+
+    // 检测金额够不够
+    let balance = await fetchBalance({
+      address: address,
+      chainId: authStore.getCurrentNetwork?.chainId,
+    })
+
+    if (balance.formatted < web3.utils.fromWei(currentRound.bidValue, 'ether')) {
+      submitPlace.value = false
+      return init({ message: 'The amount is not enough.', color: 'danger' })
+    }
 
     if (route.params.address && !validator.validate(['address'], [route.params.address], { silent: true })) {
       inviter = route.params.address as string

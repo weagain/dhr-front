@@ -8,7 +8,7 @@
   const { init } = useToast()
 
   interface Network {
-    chainId: number | string
+    chainId: number
     chainName: string
     chainSymbol: string
     coin: string

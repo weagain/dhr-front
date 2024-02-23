@@ -817,7 +817,7 @@ export const supportNetworks: NetModel[] = [
     coin: 'ETH',
     textColor: '#FFFFFF',
     color: '#000000',
-    contractAddr: '0x111cdBF288C9613019c9c324D9E9AC7e9a71e2d5',
+    contractAddr: '0x50d6e5bea4CD1D9a166689f806CB744F0395041e',
     contractAbi: generalABI,
   },
   {
@@ -827,7 +827,7 @@ export const supportNetworks: NetModel[] = [
     coin: 'BNB',
     textColor: '#FFFFFF',
     color: 'warning',
-    contractAddr: '0x50d6e5bea4CD1D9a166689f806CB744F0395041e',
+    contractAddr: '0x91C865E693898D8cf61cbfD175CF03B06e80aa69',
     contractAbi: generalABI,
   },
   {

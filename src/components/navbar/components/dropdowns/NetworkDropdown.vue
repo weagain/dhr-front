@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { supportNetworks } from '../../../../data/chains/dhrContract'
   import { useGlobalStore } from '../../../../stores/global-store'
-  import { switchNetwork } from '@wagmi/core'
+  import { switchNetwork, ConnectorNotFoundError } from '@wagmi/core'
   import { useToast } from 'vuestic-ui'
 
   const authStore = useGlobalStore()
@@ -26,9 +26,14 @@
         })
         authStore.setCurrentNetwork(item)
       }
-    } catch (err) {
-      console.log('err:', err)
-      init({ message: 'unsupport network', color: 'danger' })
+    } catch (e: any) {
+      console.log('err:', e)
+      // 处理 ConnectorNotFoundError 错误
+      if (e instanceof ConnectorNotFoundError) {
+        init({ message: 'Please connect your wallet', color: 'warning' })
+      } else {
+        init({ message: e.message || 'Unknown error', color: 'warning' })
+      }
     }
   }
 </script>
@@ -63,6 +68,7 @@
       color: #b4b400;
     }
   }
+
   .migration-wrapper {
     padding: 1px;
     clip-path: polygon(100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px, 12px 0);

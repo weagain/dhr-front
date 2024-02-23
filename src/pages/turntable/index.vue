@@ -360,18 +360,18 @@
     <section class="flex w-full">
       <section class="px-4 flex-1">
         <!-- round-prize -->
-        <div class="migration-wrapper">
+        <div class="migration-wrapper md:max-w-[60%]">
           <div class="migration-inner">
             <h2 class="text-xl md:text-2xl font-otb uppercase text-main">
               {{ t('round-info.round-prize') }} / {{ t('round-info.round-bid') }}
             </h2>
-            <div class="flex gap-x-4 items-center justify-between">
+            <div class="flex flex-col md:flex-row gap-x-4 md:items-center justify-between">
               <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 mt-2 inline-block">
                 {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }} /
                 {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }}
               </h2>
               <button
-                class="submit-button relative z-20 font-otb"
+                class="submit-button relative z-20 font-otb mt-4 md:mt-0"
                 :loading="submitPlace"
                 :disable="submitPlace"
                 @click="handlePlaceBid"
@@ -383,18 +383,18 @@
 
             <!-- round-num -->
             <h2 class="text-xl py-2 mt-2 md:text-2xl font-otb uppercase text-main">{{ t('round-info.round-num') }}</h2>
-            <div class="flex items-start justify-between">
+            <div class="flex md:items-start justify-between flex-col md:flex-row">
               <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 inline-block">
                 #{{ currentRound.number }}
               </h2>
-              <RoundAnimate />
+              <RoundAnimate class="mt-8 md:mt-0" />
             </div>
           </div>
         </div>
         <!-- participant -->
-        <div class="migration-wrapper">
+        <div class="migration-wrapper md:max-w-[60%]">
           <div class="migration-inner">
-            <h2 class="text-xl pt-4 pb-2 md:text-2xl flex gap-x-8">
+            <h2 class="text-xl pt-4 pb-2 md:text-2xl flex gap-x-8 flex-col md:flex-row">
               <span class="font-otb uppercase text-main"
                 >{{ t('round-info.round-participant') }} - {{ currentRound.participants.length }}</span
               >
@@ -421,22 +421,22 @@
       <thead>
         <tr>
           <th>Round</th>
-          <th>Users</th>
+          <th class="hidden md:initial">Users</th>
           <th>Winner</th>
-          <th>Prize</th>
-          <th>WinCode</th>
-          <th>Status</th>
+          <th class="hidden md:initial">Prize</th>
+          <th class="hidden md:initial">WinCode</th>
+          <th class="hidden md:initial">Status</th>
         </tr>
       </thead>
 
       <tbody>
         <tr v-for="(hr, index) in historyRounds.list" :key="index">
           <td>{{ hr.index }}</td>
-          <td>{{ hr.users.length }}</td>
+          <td class="hidden md:initial">{{ hr.users.length }}</td>
           <td>{{ hr.winners?.length > 0 ? hr.winners : '-No Winner-' }}</td>
-          <td>{{ hr.prize }}</td>
-          <td>{{ hr.wincode }}</td>
-          <td>
+          <td class="hidden md:initial">{{ hr.prize }}</td>
+          <td class="hidden md:initial">{{ hr.wincode }}</td>
+          <td class="hidden md:initial">
             <va-badge :text="getRoundText(hr)" :color="getRoundColor(hr)" />
           </td>
         </tr>
@@ -451,9 +451,8 @@
   }
 
   .migration-wrapper {
-    max-width: 60%;
     margin: 20px auto 0;
-    // height: 220px;
+    overflow: hidden;
     padding: 1px;
     clip-path: polygon(100% 0, 100% calc(100% - 56px), calc(100% - 56px) 100%, 0 100%, 0 32px, 32px 0);
     background: #fcfc03;

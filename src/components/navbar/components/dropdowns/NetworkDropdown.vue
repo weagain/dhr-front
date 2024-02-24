@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { supportNetworks } from '../../../../data/chains/dhrContract'
   import { useGlobalStore } from '../../../../stores/global-store'
-  import { switchNetwork, ConnectorNotFoundError } from '@wagmi/core'
+  import { switchChain, ConnectorNotFoundError } from '@wagmi/core'
   import { useToast } from 'vuestic-ui'
+  import { config } from '../../../../wagmi'
 
   const authStore = useGlobalStore()
   const { init } = useToast()
@@ -21,7 +22,7 @@
   const handleSelect = async (item: Network) => {
     try {
       if (authStore.getCurrentNetwork?.chainId != item.chainId) {
-        await switchNetwork({
+        await switchChain(config, {
           chainId: Number(item.chainId),
         })
         authStore.setCurrentNetwork(item)
@@ -41,12 +42,14 @@
 <template>
   <va-dropdown class="language-dropdown" stick-to-edges>
     <template #anchor>
-      <div class="migration-wrapper">
-        <div class="migration-inner">{{ authStore.getCurrentNetwork?.chainName || 'Network Error' }}</div>
-      </div>
-      <VaButton preset="secondary" border-color="primary">{{
+      <button>
+        <div class="migration-wrapper">
+          <div class="migration-inner">{{ authStore.getCurrentNetwork?.chainName || 'Network Error' }}</div>
+        </div>
+      </button>
+      <!-- <VaButton preset="secondary" border-color="primary">{{
         authStore.getCurrentNetwork?.chainName || 'Network Error'
-      }}</VaButton>
+      }}</VaButton> -->
     </template>
 
     <va-dropdown-content class="language-dropdown__content pl-8 pr-8 pt-2 pb-2">

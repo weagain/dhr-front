@@ -2,29 +2,11 @@
   <va-navbar class="app-layout-navbar">
     <template #left>
       <div class="left">
-        <!-- <va-icon-menu-collapsed
-          :class="{ 'x-flip': isSidebarMinimized }"
-          class="va-navbar__item"
-          :color="colors.primary"
-          @click="isSidebarMinimized = !isSidebarMinimized"
-        /> -->
         <router-link to="/">
           <vuestic-logo class="logo" />
         </router-link>
       </div>
     </template>
-    <div class="app-navbar-center">
-      <!-- <span class="hidden md:block mr-3 va-h3 text-white">{{ t('nav.message') }}</span> -->
-      <!-- <va-button
-        href="https://github.com/weagain/DestinyHashRing"
-        color="#000000"
-        class="hidden lg:block"
-        icon="github"
-        target="_blank"
-      >
-        {{ t('links.repository') }}
-      </va-button> -->
-    </div>
     <template #right>
       <app-navbar-actions class="app-navbar__actions" :user-name="userName" />
     </template>
@@ -68,13 +50,6 @@
         justify-content: space-between;
       }
     }
-    // padding: 10px 5%;
-    // position: fixed;
-    // z-index: 10;
-    // display: flex;
-    // justify-content: space-between;
-    // top: 0;
-    // align-items: center;
   }
 
   .left {

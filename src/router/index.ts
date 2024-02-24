@@ -7,18 +7,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/:catchAll(.*)',
     redirect: { name: 'turntable' },
   },
-  {
-    name: 'dhr',
-    path: '/dhr',
-    component: AppLayout,
-    children: [
-      {
-        name: 'index',
-        path: 'index/:address?/:chain?',
-        component: () => import('../pages/dhr/index.vue'),
-      },
-    ],
-  },
+  // {
+  //   name: 'dhr',
+  //   path: '/dhr',
+  //   component: AppLayout,
+  //   children: [
+  //     {
+  //       name: 'index',
+  //       path: 'index/:address?/:chain?',
+  //       component: () => import('../pages/dhr/index.vue'),
+  //     },
+  //   ],
+  // },
   {
     name: 'turntable',
     path: '/turntable',

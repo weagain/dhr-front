@@ -1,14 +1,15 @@
 <script setup lang="ts">
   import {
-    prepareWriteContract,
     getAccount,
-    fetchBalance,
+    getBalance,
     writeContract,
-    waitForTransaction,
+    waitForTransactionReceipt,
     readContract,
-    getNetwork,
-    switchNetwork,
-    watchNetwork,
+    getChains,
+    getChainId,
+    switchChain,
+    watchAccount,
+    type WriteContractParameters,
   } from '@wagmi/core'
   import { Chain } from '@wagmi/core/chains'
   import { Web3 } from 'web3'
@@ -23,14 +24,7 @@
   import Loading from '../../components/icons/Loading.vue'
   import Copy from '../../components/icons/Copy.vue'
   import TwitterX from '../../components/icons/TwitterX.vue'
-  import { wagmiConfig, projectId, chains, w3mconnectors } from '../../wagmi'
-
-  import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
-  const connector = new WalletConnectConnector({
-    options: {
-      projectId: projectId,
-    },
-  })
+  import { config } from '../../wagmi'
 
   interface RoundInfo {
     index: number | bigint
@@ -111,7 +105,7 @@
           // await handleSwithNetwork(e.chainId);
         }
       }
-      if (e.chainId == getNetwork().chain?.id) {
+      if (e.chainId == getChainId(config)) {
         currentNetwork.value = e
         authStore.setCurrentNetwork(e)
         break
@@ -127,44 +121,45 @@
     handleAllPastRound(BigInt(r))
   })
 
-  const unwatch = watchNetwork((network) => {
-    let selChain = 0
-    if (!network.chain) return
-    supportNetworks.forEach((e) => {
-      if (e.chainId == network.chain?.id) {
-        selChain = e.chainId
-        if (!authStore.getCurrentNetwork) {
-          authStore.setCurrentNetwork(e)
+  const unwatch = watchAccount(config, {
+    onChange(data) {
+      let selChain = 0
+      if (!data.chainId) return
+      supportNetworks.forEach((e) => {
+        if (e.chainId == data.chainId) {
+          selChain = e.chainId
+          if (!authStore.getCurrentNetwork) {
+            authStore.setCurrentNetwork(e)
+          }
+          return
         }
-        return
+      })
+      if (selChain == 0) {
+        // switch
+        handleSwithNetwork(supportNetworks[0].chainId)
+        authStore.setCurrentNetwork(null)
+        init({ message: 'unsupport network', color: 'warning' })
+      } else {
+        // 初始化
+        historyRounds.list = [
+          {
+            index: 0,
+            number: 0,
+            winners: [''],
+            prize: '',
+            wincode: '',
+            users: [''],
+          },
+        ]
+        handleCurrentRound(selChain)
       }
-    })
-    if (selChain == 0) {
-      // switch
-      handleSwithNetwork(supportNetworks[0].chainId)
-      authStore.setCurrentNetwork(null)
-      init({ message: 'unsupport network', color: 'warning' })
-    } else {
-      console.log('network >>>> >>>', network)
-      // 初始化
-      historyRounds.list = [
-        {
-          index: 0,
-          number: 0,
-          winners: [''],
-          prize: '',
-          wincode: '',
-          users: [''],
-        },
-      ]
-      handleCurrentRound(selChain)
-    }
+    },
   })
 
   const handleSwithNetwork = async (chainId: number) => {
-    if (chainId != getNetwork().chain?.id) {
+    if (chainId != getAccount(config).chainId) {
       try {
-        const network = await switchNetwork({
+        const network = await switchChain(config, {
           chainId: chainId,
         })
         for (let e of supportNetworks) {
@@ -182,14 +177,14 @@
   }
 
   const copyInviteUrl = async () => {
-    if (!getAccount().address) {
+    if (!getAccount(config).address) {
       init({ message: 'Please Connect Wallet First', color: 'warning' })
       return
     }
     try {
-      const currentWallet: string = getAccount().address as string
+      const currentWallet: string = getAccount(config).address as string
       const requestChain: string = route.params.chain as string
-      const currentChain: string = getNetwork().chain?.id?.toString() || ''
+      const currentChain: string = getChainId(config).toString() || ''
       let uri: string =
         'https://hash.bid/turntable/index/' + currentWallet + '/' + (requestChain ? requestChain : currentChain)
       console.log('uri:', uri)
@@ -205,11 +200,11 @@
   }
 
   const handleBidValue = async (chainId: number) => {
-    const _bidValue = await readContract({
+    const _bidValue = await readContract(config, {
       address: `0x${authStore.getCurrentNetwork?.contractAddr.slice(2)}`,
       abi: authStore.getCurrentNetwork?.contractAbi || [],
       functionName: 'betCost',
-      account: getAccount().address,
+      account: getAccount(config).address,
       chainId: chainId,
       args: [],
     })
@@ -220,11 +215,11 @@
     supportNetworks.forEach((e: NetModel) => {
       if (e.chainId == chainId && e.contractAddr != '') {
         submitPlace.value = true
-        readContract({
+        readContract(config, {
           address: `0x${e.contractAddr.slice(2)}`,
           abi: e.contractAbi,
           functionName: 'currentRoundInfo',
-          account: getAccount().address,
+          account: getAccount(config).address,
           chainId: chainId,
           args: [],
         })
@@ -249,7 +244,7 @@
 
   const handlePastRound = async (round: number) => {
     if (currentNetwork.value) {
-      const hisRounds = await readContract({
+      const hisRounds = await readContract(config, {
         address: `0x${authStore.getCurrentNetwork?.contractAddr.slice(2)}`,
         abi: authStore.getCurrentNetwork?.contractAbi || [],
         functionName: 'historyRoundInfo',
@@ -285,37 +280,35 @@
     submitPlace.value = true
     let inviter = '0x0000000000000000000000000000000000000000'
 
-    let address = getAccount().address
+    let address = getAccount(config).address
     if (!address) {
       submitPlace.value = false
-      return init({ message: 'Please connect the wallet.', color: 'danger' })
+      return init({ message: 'Please connect the wallet.', color: 'warning' })
     }
 
     // 检测金额够不够
-    let balance = await fetchBalance({
+    let balance = await getBalance(config, {
       address: address,
-      chainId: authStore.getCurrentNetwork?.chainId,
     })
 
     if (balance.formatted < web3.utils.fromWei(currentRound.bidValue, 'ether')) {
       submitPlace.value = false
-      return init({ message: 'The amount is not enough.', color: 'danger' })
+      return init({ message: 'The amount is not enough.', color: 'warning' })
     }
 
     if (route.params.address && !validator.validate(['address'], [route.params.address], { silent: true })) {
       inviter = route.params.address as string
     }
     try {
-      const { request: config } = await prepareWriteContract({
-        address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
+      const hash = await writeContract(config, {
         abi: currentNetwork.value.contractAbi,
+        address: `0x${currentNetwork.value.contractAddr.slice(2)}`,
         functionName: 'enjoy',
         args: [inviter],
         value: BigInt(currentRound.bidValue),
-      })
+      } as WriteContractParameters)
 
-      const { hash } = await writeContract(config)
-      const receipt = await waitForTransaction({ hash })
+      const receipt = await waitForTransactionReceipt(config, { hash })
       if (receipt.status == 'success') {
         init({ message: 'Success', color: 'success' })
         handleCurrentRound(currentNetwork.value.chainId)
@@ -324,6 +317,7 @@
       }
       submitPlace.value = false
     } catch (e: any) {
+      console.log('e::::::', e)
       submitPlace.value = false
       init({ message: e.message, color: 'danger' })
     }
@@ -410,7 +404,7 @@
               <p
                 v-for="(item, index) in currentRound.participants"
                 :key="index"
-                class="text-sm font-otr running m-1 inline-block"
+                class="text-xs break-all md:text-sm font-otr running m-1 inline-block"
               >
                 {{ item }}
               </p>
@@ -437,7 +431,7 @@
         <tr v-for="(hr, index) in historyRounds.list" :key="index">
           <td>{{ hr.index }}</td>
           <td class="hidden md:table-cell">{{ hr.users.length }}</td>
-          <td>{{ hr.winners?.length > 0 ? hr.winners : '-No Winner-' }}</td>
+          <td class="break-all">{{ hr.winners?.length > 0 ? hr.winners[0] : '-No Winner-' }}</td>
           <td class="hidden md:table-cell">{{ hr.prize }}</td>
           <td class="hidden md:table-cell">{{ hr.wincode }}</td>
           <td class="hidden md:table-cell">

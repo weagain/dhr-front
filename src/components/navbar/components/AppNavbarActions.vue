@@ -1,57 +1,47 @@
-<template>
-  <div class="app-navbar-actions">
-    <!-- <color-dropdown class="app-navbar-actions__item" /> -->
-    <settings-dropdown class="app-navbar-actions__item" />
-    <!-- <language-dropdown class="app-navbar-actions__item" /> -->
-    <NetworkDropdown />
-    <w3m-core-button class="w3m-core-button"></w3m-core-button>
-  </div>
-</template>
-
 <script setup lang="ts">
-  import LanguageDropdown from './dropdowns/LanguageDropdown.vue'
-  import ColorDropdown from './dropdowns/ColorDropdown.vue'
   import NetworkDropdown from './dropdowns/NetworkDropdown.vue'
   import { useGlobalStore } from '../../../stores/global-store'
-  import { EthereumClient } from '@web3modal/ethereum'
-  import { Web3Modal } from '@web3modal/html'
-  import { getAccount, getNetwork, signMessage, disconnect } from '@wagmi/core'
-  import { nextTick } from 'vue'
-  import { wagmiConfig, projectId, chains, w3mconnectors } from '../../../wagmi'
+  import { getAccount, getChainId } from '@wagmi/core'
+  import { nextTick, watch } from 'vue'
+  import { config } from '../../../wagmi'
+  import { useWeb3ModalState } from '@web3modal/wagmi/vue'
 
   const GlobalStore = useGlobalStore()
+  const state = useWeb3ModalState()
+  // w3m 的弹窗
+  watch(
+    () => state.open,
+    async (val) => {
+      console.log('val', val)
+      if (!val) {
+        const account = getAccount(config)
+        const chainId = getChainId(config)
 
-  const ethereumClient = new EthereumClient(wagmiConfig, chains)
-  const web3modal = new Web3Modal({ projectId }, ethereumClient)
-
-  // 弹窗是否打开
-  web3modal.subscribeModal(({ open }) => {
-    const account = getAccount()
-    const network = getNetwork()
-
-    if (!open) {
-      GlobalStore.setUserAddress(account.address ? account.address : '')
-      GlobalStore.setUserChainId(network.chain ? network.chain.id : 0)
-    }
-  })
+        if (!open) {
+          GlobalStore.setUserAddress(account.address)
+          GlobalStore.setUserChainId(chainId)
+        }
+      }
+    },
+  )
 
   // 页面刷新，渲染完成之后
   nextTick(() => {
     // 查看是否自动了链接了钱包，并全局赋值
-    const account = getAccount()
-    const network = getNetwork()
+    const account = getAccount(config)
+    const chainId = getChainId(config)
 
     if (!account.address) {
       return GlobalStore.setUserAddress('')
     }
 
-    if (!network.chain) {
+    if (!chainId) {
       return GlobalStore.setUserChainId(0)
     }
 
-    GlobalStore.setUserChainId(network.chain.id)
+    GlobalStore.setUserChainId(chainId)
     GlobalStore.setUserAddress(account.address)
-    // 读取全局 address 地址
+    // // 读取全局 address 地址
     console.log('读取全局 address 地址::', GlobalStore.userAddress, ' chainid:', GlobalStore.userChainId)
   })
 
@@ -70,6 +60,14 @@
     (e: 'update:isTopBar', isTopBar: boolean): void
   }>()
 </script>
+
+<template>
+  <div class="app-navbar-actions">
+    <!-- <settings-dropdown class="app-navbar-actions__item" /> -->
+    <NetworkDropdown />
+    <w3m-account-button balance="hide" />
+  </div>
+</template>
 
 <style lang="scss">
   .app-navbar-actions {

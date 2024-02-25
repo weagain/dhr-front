@@ -5,17 +5,15 @@
     writeContract,
     waitForTransactionReceipt,
     readContract,
-    getChains,
     getChainId,
     switchChain,
     watchAccount,
     type WriteContractParameters,
   } from '@wagmi/core'
-  import { Chain } from '@wagmi/core/chains'
   import { Web3 } from 'web3'
   import { validator } from 'web3-validator'
   import { ref, reactive, watch, onMounted } from 'vue'
-  import { useForm, useModal, useToast, useColors } from 'vuestic-ui'
+  import { useModal, useToast, useColors } from 'vuestic-ui'
   import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import { useGlobalStore } from '../../stores/global-store'
@@ -36,9 +34,7 @@
   }
 
   const { t } = useI18n()
-  const { confirm } = useModal()
   const { init } = useToast()
-  const { colors } = useColors()
   const authStore = useGlobalStore()
   const route = useRoute()
   const web3 = new Web3()
@@ -121,7 +117,7 @@
     handleAllPastRound(BigInt(r))
   })
 
-  const unwatch = watchAccount(config, {
+  watchAccount(config, {
     onChange(data) {
       let selChain = 0
       if (!data.chainId) return
@@ -324,7 +320,7 @@
   }
 
   const handleInvite = () => {
-    let backUri = encodeURIComponent('https://https://hash.bid/turntable/index?w=' + getAccount().address)
+    let backUri = encodeURIComponent('https://https://hash.bid/turntable/index?w=' + getAccount(config).address)
     let content = "I'm spinning the wheel of hash. Come join me and win a prize! \n"
     content += '#DestinyHashRing #DHR #HashWorld\n'
     content += '📍Click to join & win money\n'

@@ -61,7 +61,7 @@ const BLAST = {
     },
   },
 }
-const chains = [BLAST, mainnet, bsc, zora, DIS]
+const chains = [BLAST, mainnet, bsc, zora, DIS] as const
 export const config = defaultWagmiConfig({
   chains, // required
   projectId, // required
@@ -73,7 +73,7 @@ export const config = defaultWagmiConfig({
 
 reconnect(config)
 // 3. Create modal
-let a = createWeb3Modal({
+const a = createWeb3Modal({
   wagmiConfig: config,
   projectId,
   themeMode: 'light',

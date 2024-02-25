@@ -1,12 +1,14 @@
 <script setup lang="ts">
+  import { watch, ref, onMounted, nextTick } from 'vue'
   import { supportNetworks } from '../../../../data/chains/dhrContract'
   import { useGlobalStore } from '../../../../stores/global-store'
-  import { switchChain, ConnectorNotFoundError } from '@wagmi/core'
+  import { switchChain, ConnectorNotFoundError, getAccount } from '@wagmi/core'
   import { useToast } from 'vuestic-ui'
   import { config } from '../../../../wagmi'
 
   const authStore = useGlobalStore()
   const { init } = useToast()
+  const showButton = ref(false)
 
   interface Network {
     chainId: number
@@ -19,6 +21,17 @@
     contractAbi: any[]
   }
 
+  watch(
+    [() => authStore.getCurrentNetwork, () => authStore.getUserAddress],
+    ([val, val02]) => {
+      if (!!val && val02) {
+        showButton.value = true
+      } else {
+        showButton.value = false
+      }
+    }
+  )
+
   const handleSelect = async (item: Network) => {
     try {
       if (authStore.getCurrentNetwork?.chainId != item.chainId) {
@@ -28,28 +41,29 @@
         authStore.setCurrentNetwork(item)
       }
     } catch (e: any) {
-      console.log('err:', e)
+      console.log('err:', e.name)
       // 处理 ConnectorNotFoundError 错误
       if (e instanceof ConnectorNotFoundError) {
         init({ message: 'Please connect your wallet', color: 'warning' })
       } else {
         init({ message: e.message || 'Unknown error', color: 'warning' })
       }
+
+      if (e.name == 'UserRejectedRequestError') {
+        init({ message: 'User rejected the request.', color: 'warning' })
+      }
     }
   }
 </script>
 
 <template>
-  <va-dropdown class="language-dropdown" stick-to-edges>
+  <va-dropdown v-if="showButton" class="language-dropdown" stick-to-edges>
     <template #anchor>
       <button>
         <div class="migration-wrapper">
           <div class="migration-inner">{{ authStore.getCurrentNetwork?.chainName || 'Network Error' }}</div>
         </div>
       </button>
-      <!-- <VaButton preset="secondary" border-color="primary">{{
-        authStore.getCurrentNetwork?.chainName || 'Network Error'
-      }}</VaButton> -->
     </template>
 
     <va-dropdown-content class="language-dropdown__content pl-8 pr-8 pt-2 pb-2">

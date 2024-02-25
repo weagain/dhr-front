@@ -811,6 +811,16 @@ export interface NetModel {
 }
 export const supportNetworks: NetModel[] = [
   {
+    chainId: 513100,
+    chainName: 'Disney Chain',
+    chainSymbol: 'DIS',
+    coin: 'DIS',
+    textColor: '#FFFFFF',
+    color: 'primary',
+    contractAddr: '0x818B271ACa8885EE8246B023A8e324fA9c0C414D',
+    contractAbi: generalABI,
+  },
+  {
     chainId: 7777777,
     chainName: 'ZORA Network',
     chainSymbol: 'ETH',
@@ -828,16 +838,6 @@ export const supportNetworks: NetModel[] = [
     textColor: '#FFFFFF',
     color: 'warning',
     contractAddr: '0x91C865E693898D8cf61cbfD175CF03B06e80aa69',
-    contractAbi: generalABI,
-  },
-  {
-    chainId: 513100,
-    chainName: 'Disney Chain',
-    chainSymbol: 'DIS',
-    coin: 'DIS',
-    textColor: '#FFFFFF',
-    color: 'primary',
-    contractAddr: '0x818B271ACa8885EE8246B023A8e324fA9c0C414D',
     contractAbi: generalABI,
   },
   {

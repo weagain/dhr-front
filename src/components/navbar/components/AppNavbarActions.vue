@@ -1,49 +1,28 @@
 <script setup lang="ts">
   import NetworkDropdown from './dropdowns/NetworkDropdown.vue'
   import { useGlobalStore } from '../../../stores/global-store'
-  import { getAccount, getChainId } from '@wagmi/core'
+  import { getAccount, getChainId, disconnect } from '@wagmi/core'
   import { nextTick, watch } from 'vue'
   import { config } from '../../../wagmi'
-  import { useWeb3ModalState } from '@web3modal/wagmi/vue'
+  import { useWeb3ModalState, useWeb3Modal } from '@web3modal/wagmi/vue'
+  import Logout from '../../icons/Logout.vue'
 
   const GlobalStore = useGlobalStore()
   const state = useWeb3ModalState()
-  // w3m 的弹窗
-  watch(
-    () => state.open,
-    async (val) => {
-      console.log('val', val)
-      if (!val) {
-        const account = getAccount(config)
-        const chainId = getChainId(config)
+  const modal = useWeb3Modal()
 
-        if (!open) {
-          GlobalStore.setUserAddress(account.address)
-          GlobalStore.setUserChainId(chainId)
-        }
-      }
-    },
-  )
-
-  // 页面刷新，渲染完成之后
-  nextTick(() => {
-    // 查看是否自动了链接了钱包，并全局赋值
-    const account = getAccount(config)
-    const chainId = getChainId(config)
-
-    if (!account.address) {
-      return GlobalStore.setUserAddress('')
+  const connectWallet = () => {
+    if (!GlobalStore.getUserAddress) {
+      modal.open()
     }
+  }
 
-    if (!chainId) {
-      return GlobalStore.setUserChainId(0)
-    }
-
-    GlobalStore.setUserChainId(chainId)
-    GlobalStore.setUserAddress(account.address)
-    // // 读取全局 address 地址
-    console.log('读取全局 address 地址::', GlobalStore.userAddress, ' chainid:', GlobalStore.userChainId)
-  })
+  const handleLogout = () => {
+    disconnect(config)
+    GlobalStore.setUserChainId('')
+    GlobalStore.setUserAddress('')
+    GlobalStore.setCurrentNetwork(null)
+  }
 
   withDefaults(
     defineProps<{
@@ -62,10 +41,16 @@
 </script>
 
 <template>
-  <div class="app-navbar-actions">
+  <div class="app-navbar-actions gap-x-4">
     <!-- <settings-dropdown class="app-navbar-actions__item" /> -->
     <NetworkDropdown />
-    <w3m-account-button balance="hide" />
+    <div v-if="GlobalStore.getUserAddress" class="gap-x-4 flex items-center">
+      <span class="text-base text-white font-otr">{{ GlobalStore.getUserAddress.replace(/^(\w{6}).*(\w{4})$/, '$1****$2') }}</span>
+      <Logout @click="handleLogout" class="text-white cursor-pointer" />
+    </div>
+    <div v-else>
+      <VaButton round @click="connectWallet"> Connect </VaButton>
+    </div>
   </div>
 </template>
 

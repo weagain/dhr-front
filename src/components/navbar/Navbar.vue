@@ -34,7 +34,7 @@
 
 <style lang="scss" scoped>
   .va-navbar {
-    z-index: 2;
+    z-index: 1;
     padding: 6px 10px;
     color: white;
     background-color: black !important;

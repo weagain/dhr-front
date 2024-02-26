@@ -145,10 +145,7 @@ export const config = createConfig({
     [ZORA.id]: http(),
     [DIS.id]: http(),
   },
-  connectors: [
-    walletConnect({ projectId, metadata, showQrModal: false }),
-    injected({ shimDisconnect: true }),
-  ]
+  connectors: [walletConnect({ projectId, metadata, showQrModal: false }), injected({ shimDisconnect: true })],
 })
 
 reconnect(config)
@@ -156,5 +153,5 @@ reconnect(config)
 createWeb3Modal({
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true // Optional - defaults to your Cloud configuration
+  enableAnalytics: true, // Optional - defaults to your Cloud configuration
 })

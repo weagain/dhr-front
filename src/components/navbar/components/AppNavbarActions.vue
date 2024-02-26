@@ -45,8 +45,10 @@
     <!-- <settings-dropdown class="app-navbar-actions__item" /> -->
     <NetworkDropdown />
     <div v-if="GlobalStore.getUserAddress" class="gap-x-4 flex items-center">
-      <span class="text-base text-white font-otr">{{ GlobalStore.getUserAddress.replace(/^(\w{6}).*(\w{4})$/, '$1****$2') }}</span>
-      <Logout @click="handleLogout" class="text-white cursor-pointer" />
+      <span class="text-base text-white font-otr">{{
+        GlobalStore.getUserAddress.replace(/^(\w{6}).*(\w{4})$/, '$1****$2')
+      }}</span>
+      <Logout class="text-white cursor-pointer" @click="handleLogout" />
     </div>
     <div v-else>
       <VaButton round @click="connectWallet"> Connect </VaButton>

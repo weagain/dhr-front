@@ -21,16 +21,13 @@
     contractAbi: any[]
   }
 
-  watch(
-    [() => authStore.getCurrentNetwork, () => authStore.getUserAddress],
-    ([val, val02]) => {
-      if (!!val && val02) {
-        showButton.value = true
-      } else {
-        showButton.value = false
-      }
+  watch([() => authStore.getCurrentNetwork, () => authStore.getUserAddress], ([val, val02]) => {
+    if (!!val && val02) {
+      showButton.value = true
+    } else {
+      showButton.value = false
     }
-  )
+  })
 
   const handleSelect = async (item: Network) => {
     try {

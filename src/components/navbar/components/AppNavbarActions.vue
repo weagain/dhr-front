@@ -6,6 +6,7 @@
   import { config } from '../../../wagmi'
   import { useWeb3ModalState, useWeb3Modal } from '@web3modal/wagmi/vue'
   import Logout from '../../icons/Logout.vue'
+  import Fire from '../../../components/icons/Fire.vue'
 
   const GlobalStore = useGlobalStore()
   const state = useWeb3ModalState()
@@ -43,6 +44,10 @@
 <template>
   <div class="app-navbar-actions gap-x-4">
     <!-- <settings-dropdown class="app-navbar-actions__item" /> -->
+    <div class="migration-wrapper">
+      <div class="migration-inner gap-x-1"><Fire /> <span>HB Points: 0</span></div>
+    </div>
+
     <NetworkDropdown />
     <div v-if="GlobalStore.getUserAddress" class="gap-x-4 flex items-center">
       <span class="text-base text-white font-otr">{{
@@ -108,6 +113,24 @@
 
     .w3m-core-button {
       margin-left: 1.25rem;
+    }
+
+    .migration-wrapper {
+      padding: 1px;
+      clip-path: polygon(100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px, 12px 0);
+      background: white;
+      border-radius: 3px;
+      color: white;
+
+      .migration-inner {
+        display: flex;
+        align-items: center;
+        // height: 218px;
+        padding: 10px 20px;
+        border-radius: 3px;
+        clip-path: polygon(100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px, 12px 0);
+        background: black;
+      }
     }
   }
 </style>

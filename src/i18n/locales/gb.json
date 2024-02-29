@@ -20,14 +20,14 @@
     "round-bid": "Bid Value",
     "support-chains": "Support Chains",
     "introduction": "How To Play",
-    "details-1": "1.Each round requires 16 participants.",
-    "details-2": "2.Participants contribute a fixed amount.",
-    "details-3": "3.The draw occurs automatically after 16 entries.",
-    "details-4": "4.Winners are determined by a specific algorithm.",
-    "details-5": "5.Rounds may have no winners or multiple winners.",
-    "details-6": "6.If no winner, the prize rolls over to the next round. If multiple winners, the prize is split evenly.",
-    "details-7": "7.After a round ends, the next begins automatically.",
-    "details-8": "8.Invite others to participate. If the invited person wins, the inviter receives a 10% prize share",
+    "details-1": "1. Each round requires 16 participants.",
+    "details-2": "2. Participants contribute a fixed amount.",
+    "details-3": "3. The draw occurs automatically after 16 entries.",
+    "details-4": "4. Winners are determined by a specific algorithm.",
+    "details-5": "5. Rounds may have no winners or multiple winners.",
+    "details-6": "6. If no winner, the prize rolls over to the next round. If multiple winners, the prize is split evenly.",
+    "details-7": "7. After a round ends, the next begins automatically.",
+    "details-8": "8. Invite others to participate. If the invited person wins, the inviter receives a 10% prize share",
     "invite-button": "Copy Invite Url"
   }
 }

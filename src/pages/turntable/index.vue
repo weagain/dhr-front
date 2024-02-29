@@ -353,20 +353,29 @@
   <div class="turn-container">
     <section class="text-center">
       <h1 class="text-5xl font-otb uppercase text-main">{{ t('nav.message') }}</h1>
-      <p class="text-white font-cpl py-2 leading-[1.2] mx-auto max-w-[80%]">
+      <section class="text-white flex items-center justify-center gap-x-8 my-4">
+        <button class="flex items-center" @click="copyInviteUrl">
+          <Copy class="text-main text-xl" /><span class="ml-2 font-otr underline">{{ copyText }}</span>
+        </button>
+        <button class="flex items-center" @click="handleInvite">
+          <TwitterX class="text-main" /><span class="ml-2 font-otr underline">Tweet to Earn</span>
+        </button>
+      </section>
+      <!-- <p class="text-white font-cpl py-2 leading-[1.2] mx-auto max-w-[80%]">
         {{ t('round-info.details-1') }} {{ t('round-info.details-2') }} {{ t('round-info.details-3') }}
         {{ t('round-info.details-4') }} {{ t('round-info.details-5') }} {{ t('round-info.details-6') }}
         {{ t('round-info.details-7') }} {{ t('round-info.details-8') }}
-      </p>
-    </section>
-
-    <section class="text-white flex items-center justify-center gap-x-8 my-4">
-      <button class="flex items-center" @click="copyInviteUrl">
-        <Copy class="text-main text-xl" /><span class="ml-2 font-otr underline">{{ copyText }}</span>
-      </button>
-      <button class="flex items-center" @click="handleInvite">
-        <TwitterX class="text-main" /><span class="ml-2 font-otr underline">Tweet to Earn</span>
-      </button>
+      </p> -->
+      <div class="max-w-[50%] text-white leading-[1.2] mx-auto text-left mt-2">
+        <p class="font-cpl">{{ t('round-info.details-1') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-2') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-3') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-4') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-5') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-6') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-7') }}</p>
+        <p class="font-cpl">{{ t('round-info.details-8') }}</p>
+      </div>
     </section>
 
     <section class="flex w-full">
@@ -414,13 +423,13 @@
                 <Copy class="text-xl" /><span class="ml-2 text-white font-otr underline text-base">{{ copyText }}</span>
               </button>
             </h2>
-            <div v-if="currentRound.participants?.length > 0" class="text-white">
+            <div v-if="currentRound.participants?.length > 0" class="text-white flex items-center flex-wrap">
               <p
                 v-for="(item, index) in currentRound.participants"
                 :key="index"
-                class="text-xs break-all md:text-sm font-otr running m-1 inline-block"
+                class="text-sm break-all md:text-sm font-otr running participant my-1 inline-block"
               >
-                {{ item }}
+                {{ item.replace(/^(\w{8}).*(\w{8})$/, '$1*********$2') }}
               </p>
             </div>
             <div v-else class="text-white">- -</div>
@@ -474,6 +483,10 @@
 <style lang="scss" scoped>
   .running {
     border: 1px dashed white;
+  }
+  .participant {
+    width: 260px;
+    text-align: center;
   }
 
   .migration-wrapper {

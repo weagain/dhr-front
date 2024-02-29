@@ -1,21 +1,13 @@
 <template>
-  <va-navbar class="app-layout-bottombar">
-    <div class="app-bottombar-center">
-      <span class="hidden md:block mr-2">&copy; 2023 {{ t('nav.title') }}</span>
-      <va-button
-        href="https://github.com/weagain/DestinyHashRing"
-        color="#000000"
-        class="hidden lg:block"
-        icon="github"
-        target="_blank"
-      >
-        {{ t('links.repository') }}
-      </va-button>
-      <va-button href="https://t.me/hashbid" color="#3C8FCC" class="hidden lg:block" icon="telegram" target="_blank">
-        {{ t('links.community') }}
-      </va-button>
-    </div>
-  </va-navbar>
+  <div class="app-bottombar-center gap-x-4">
+    <span class="hidden md:block mr-2 ml-auto">&copy; 2024 {{ t('nav.title') }}</span>
+    <a target="_blank" href="https://github.com/weagain/DestinyHashRing" class="flex items-center gap-x-1 underline"
+      ><Github />{{ t('links.repository') }}</a
+    >
+    <a target="_blank" href="https://t.me/hashbid" class="flex items-center gap-x-1 underline mr-auto"
+      ><Telegram />{{ t('links.community') }}</a
+    >
+  </div>
 </template>
 
 <script setup>
@@ -24,9 +16,8 @@
   import { useGlobalStore } from '../../stores/global-store'
   import { useI18n } from 'vue-i18n'
   import { useColors } from 'vuestic-ui'
-  import VuesticLogo from '../VuesticLogo.vue'
-  import VaIconMenuCollapsed from '../icons/VaIconMenuCollapsed.vue'
-  import AppNavbarActions from './components/AppNavbarActions.vue'
+  import Github from '../../components/icons/Github.vue'
+  import Telegram from '../../components/icons/Telegram.vue'
 
   const GlobalStore = useGlobalStore()
   const { t } = useI18n()
@@ -78,7 +69,8 @@
   .app-bottombar-center {
     display: flex;
     align-items: center;
-    height: 1rem;
+    padding: 30px 0;
+    color: white;
 
     @media screen and (max-width: 1200px) {
       &__github-button {

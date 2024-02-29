@@ -9,7 +9,7 @@
     switchChain,
     watchAccount,
     type WriteContractParameters,
-    ConnectorNotFoundError,
+    type ReadContractParameters,
   } from '@wagmi/core'
   import { Web3 } from 'web3'
   import { validator } from 'web3-validator'
@@ -107,7 +107,7 @@
   // onMounted
   onMounted(async () => {
     // roundinfo
-    getCurrentRound()
+    // getCurrentRound()
   })
 
   watch([() => currentRound.number], async ([r]) => {
@@ -120,6 +120,8 @@
       if (!data.isConnected) {
         return
       }
+
+      console.log('>>>>>>data.chainId', data.chainId)
 
       // 连接了钱包
       authStore.setUserAddress(data.address)
@@ -142,22 +144,18 @@
     }
   }
 
-  // 没有全局 network，则未登录，默认走支持链的第1个 dis rpc
-  const getCurrentSupportNetwork = (chainId?: number) => {
-    if (!chainId) {
-      return supportNetworks[0]
-    }
-    return supportNetworks.find((sc) => sc.chainId === chainId) || supportNetworks[2]
+  // 没有匹配上全局 network
+  const getCurrentSupportNetwork = (chainId: number) => {
+    return supportNetworks.find((sc) => sc.chainId === chainId) || null
   }
 
   // getCurrentRound
   const getCurrentRound = () => {
-    let chain
-    if (!authStore.getCurrentNetwork) {
-      chain = getCurrentSupportNetwork()
-      authStore.setCurrentNetwork(chain)
-    } else {
-      chain = authStore.getCurrentNetwork
+    let chain = getCurrentSupportNetwork(authStore.getUserChainId)
+    authStore.setCurrentNetwork(chain)
+
+    if (!chain) {
+      return (submitPlace.value = false)
     }
 
     submitPlace.value = true
@@ -204,7 +202,7 @@
         functionName: 'betCost',
         account: getAccount(config).address,
         chainId: authStore.getCurrentNetwork?.chainId,
-      })
+      } as ReadContractParameters)
         .then((_bidValue) => {
           resolve(_bidValue)
         })

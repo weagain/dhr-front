@@ -21,8 +21,8 @@
     contractAbi: any[]
   }
 
-  watch([() => authStore.getCurrentNetwork, () => authStore.getUserAddress], ([val, val02]) => {
-    if (!!val && val02) {
+  watch([() => authStore.getUserAddress], ([val02]) => {
+    if (val02) {
       showButton.value = true
     } else {
       showButton.value = false
@@ -57,7 +57,7 @@
   <va-dropdown v-if="showButton" class="language-dropdown" stick-to-edges>
     <template #anchor>
       <button>
-        <div class="migration-wrapper">
+        <div class="migration-wrapper" :class="[!authStore.getCurrentNetwork ? 'error' : '']">
           <div class="migration-inner">{{ authStore.getCurrentNetwork?.chainName || 'Network Error' }}</div>
         </div>
       </button>
@@ -89,6 +89,11 @@
     background: #fcfc03;
     border-radius: 3px;
     color: #fcfc03;
+
+    &.error {
+      background: red;
+      color: red;
+    }
 
     .migration-inner {
       // height: 218px;

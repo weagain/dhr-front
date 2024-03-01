@@ -24,6 +24,9 @@
   import Loading from '../../components/icons/Loading.vue'
   import Copy from '../../components/icons/Copy.vue'
   import TwitterX from '../../components/icons/TwitterX.vue'
+  import Question from '../../components/icons/Question.vue'
+  import SQuestion from '../../components/icons/SingleQuestion.vue'
+  import ModalX from '../../components/Modal/index.vue'
 
   interface RoundInfo {
     index: number | bigint
@@ -51,6 +54,7 @@
   const route = useRoute()
   const web3 = new Web3()
   const copyText = ref<string>('Invitation link')
+  const showQuestion = ref<boolean>(false)
 
   function getRoundText(round: RoundInfo) {
     if (round.index == currentRound.number) {
@@ -106,8 +110,7 @@
 
   // onMounted
   onMounted(async () => {
-    // roundinfo
-    // getCurrentRound()
+    // ...
   })
 
   watch([() => currentRound.number], async ([r]) => {
@@ -347,6 +350,10 @@
   const handleGotoTx = (address: string) => {
     window.open(`https://www.oklink.com/cn/dis/address/${address}`)
   }
+
+  const handleToggleQuestion = () => {
+    showQuestion.value = !showQuestion.value
+  }
 </script>
 
 <template>
@@ -360,60 +367,76 @@
         <button class="flex items-center" @click="handleInvite">
           <TwitterX class="text-main" /><span class="ml-2 font-otr underline">Tweet to Earn</span>
         </button>
+        <button class="flex items-center" @click="handleToggleQuestion">
+          <Question class="text-main question" /><span class="ml-2 font-otr underline">Rules</span>
+        </button>
       </section>
-      <!-- <p class="text-white font-cpl py-2 leading-[1.2] mx-auto max-w-[80%]">
-        {{ t('round-info.details-1') }} {{ t('round-info.details-2') }} {{ t('round-info.details-3') }}
-        {{ t('round-info.details-4') }} {{ t('round-info.details-5') }} {{ t('round-info.details-6') }}
-        {{ t('round-info.details-7') }} {{ t('round-info.details-8') }}
-      </p> -->
-      <div class="max-w-[50%] text-white leading-[1.2] mx-auto text-left mt-2">
-        <p class="font-cpl">{{ t('round-info.details-1') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-2') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-3') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-4') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-5') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-6') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-7') }}</p>
-        <p class="font-cpl">{{ t('round-info.details-8') }}</p>
-      </div>
+
+      <aside class="max-w-[60%] mx-auto text-center text-2xl font-cpl text-white py-4">xxxxxzxzzxxzzxxxxzzzzzzx</aside>
+
+      <ModalX v-model="showQuestion" class="text-left" @close="handleToggleQuestion">
+        <template #default>
+          <p class="font-cpl">{{ t('round-info.details-1') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-2') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-3') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-4') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-5') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-6') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-7') }}</p>
+          <p class="font-cpl">{{ t('round-info.details-8') }}</p>
+        </template>
+      </ModalX>
     </section>
 
     <section class="flex w-full">
       <section class="px-4 flex-1">
-        <!-- round-prize -->
-        <div class="migration-wrapper md:max-w-[60%]">
-          <div class="migration-inner">
-            <h2 class="text-xl md:text-2xl font-otb uppercase text-main">
-              {{ t('round-info.round-prize') }} / {{ t('round-info.round-bid') }}
-            </h2>
-            <div class="flex flex-col md:flex-row gap-x-4 md:items-center justify-between">
-              <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 mt-2 inline-block">
-                {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }} /
-                {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }}
+        <div class="flex gap-x-4 w-full md:max-w-[900px] mx-auto flex-col md:flex-row">
+          <!-- round-prize -->
+          <div class="migration-wrapper flex-1">
+            <div class="migration-inner">
+              <h2 class="text-xl md:text-2xl font-otb uppercase text-main">
+                {{ t('round-info.round-prize') }} / {{ t('round-info.round-bid') }}
               </h2>
-              <button
-                class="submit-button relative z-20 font-otb mt-4 md:mt-0"
-                :loading="submitPlace"
-                :disable="submitPlace"
-                @click="handlePlaceBid"
-              >
-                <Loading v-if="submitPlace" />
-                Place Joy
-              </button>
-            </div>
+              <div class="flex flex-col md:flex-row gap-x-4 md:items-center justify-between">
+                <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 mt-2 inline-block">
+                  {{ web3.utils.fromWei(currentRound.prize, 'ether') }} {{ authStore.getCurrentNetwork?.chainSymbol }} /
+                  {{ web3.utils.fromWei(currentRound.bidValue, 'ether') }}
+                  {{ authStore.getCurrentNetwork?.chainSymbol }}
+                </h2>
+                <button
+                  class="submit-button relative z-20 font-otb mt-4 md:mt-0"
+                  :loading="submitPlace"
+                  :disable="submitPlace"
+                  @click="handlePlaceBid"
+                >
+                  <Loading v-if="submitPlace" />
+                  Place Joy
+                </button>
+              </div>
 
-            <!-- round-num -->
-            <h2 class="text-xl py-2 mt-2 md:text-2xl font-otb uppercase text-main">{{ t('round-info.round-num') }}</h2>
-            <div class="flex md:items-start justify-between flex-col md:flex-row">
-              <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 inline-block">
-                #{{ currentRound.number }}
+              <!-- round-num -->
+              <h2 class="text-xl py-2 mt-2 md:text-2xl font-otb uppercase text-main">
+                {{ t('round-info.round-num') }}
               </h2>
-              <RoundAnimate class="mt-8 md:mt-0" />
+              <div class="flex md:items-start justify-between flex-col md:flex-row">
+                <h2 class="text-xl font-otsb uppercase text-white running px-3 py-1 inline-block">
+                  #{{ currentRound.number }}
+                </h2>
+                <RoundAnimate class="mt-8 md:mt-0" />
+              </div>
+            </div>
+          </div>
+          <!-- points -->
+          <div class="migration-wrapper-bg self-stretch flex-grow w-full md:flex-none md:w-[15rem]">
+            <h2 class="text-xl md:text-2xl font-otb uppercase text-black">POINTS</h2>
+            <div>
+              <SQuestion class="text-[9rem] text-black mx-auto" />
             </div>
           </div>
         </div>
+
         <!-- participant -->
-        <div class="migration-wrapper md:max-w-[60%]">
+        <div class="migration-wrapper w-full md:max-w-[900px]">
           <div class="migration-inner">
             <h2 class="text-xl pt-4 pb-2 md:text-2xl flex gap-x-8 flex-col md:flex-row">
               <span class="font-otb uppercase text-main"
@@ -492,18 +515,36 @@
   .migration-wrapper {
     margin: 20px auto 0;
     overflow: hidden;
-    padding: 1px;
+    padding: 2px;
     clip-path: polygon(100% 0, 100% calc(100% - 56px), calc(100% - 56px) 100%, 0 100%, 0 32px, 32px 0);
     background: #fcfc03;
-    border-radius: 3px;
+    border-radius: 12px;
 
     .migration-inner {
-      // height: 218px;
       padding: 20px 40px;
-      border-radius: 3px;
+      border-radius: 10px;
       clip-path: polygon(100% 0, 100% calc(100% - 56px), calc(100% - 56px) 100%, 0 100%, 0 32px, 32px 0);
       background: black;
     }
+  }
+
+  .migration-wrapper-bg {
+    margin: 20px auto 0;
+    overflow: hidden;
+    padding: 20px 40px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - 32px) 0,
+      100% 32px,
+      100% 100%,
+      calc(100% - 50%) 100%,
+      calc(100% - 50% - 6px) calc(100% - 8px),
+      calc(100% - 50% - 102px) calc(100% - 8px),
+      calc(100% - 50% - 108px) 100%,
+      0 100%
+    );
+    background: #fcfc03;
+    border-radius: 12px;
   }
 
   .submit-button {
@@ -538,5 +579,21 @@
       background-color: black !important;
       color: white;
     }
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(360deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .question {
+    animation: rotate 2s 1s infinite;
   }
 </style>

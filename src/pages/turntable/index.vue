@@ -372,7 +372,11 @@
         </button>
       </section>
 
-      <aside class="max-w-[60%] mx-auto text-center text-2xl font-cpl text-white py-4">xxxxxzxzzxxzzxxxxzzzzzzx</aside>
+      <aside class="max-w-[60%] mx-auto text-center text-2xl font-cpl text-white py-4">
+        Step into the vibrant arena of HASH WORLD, where every bid is a brush with destiny and fairness reigns supreme.
+        Unleash your strategy, place your joy, and join the thrill of the chase as you vie for digital glory among peers
+        in the electrifying pursuit of points and prizes!
+      </aside>
 
       <ModalX v-model="showQuestion" class="text-left" @close="handleToggleQuestion">
         <template #default>
@@ -493,7 +497,10 @@
             </span>
           </td>
           <td class="text-xs md:text-base">{{ hr.prize }}</td>
-          <td class="text-xs md:text-base">{{ hr.wincode }}</td>
+          <td class="text-xs md:text-base">
+            <span v-if="currentRound.number != hr.index">{{ hr.wincode }}</span>
+            <span v-else>-</span>
+          </td>
           <td>
             <va-badge :text="getRoundText(hr)" :color="getRoundColor(hr)" />
           </td>

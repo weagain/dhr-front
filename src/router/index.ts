@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: AppLayout,
     children: [
       {
-        name: 'turntable',
+        name: 'turntable-index',
         path: 'index/:address?/:chain?',
         component: () => import('../pages/turntable/index.vue'),
       },
